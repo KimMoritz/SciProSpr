@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">SciProSpr</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_setting">SettingActivity</string>
+    <string name="instruction_please_choose_variables">Please, choose the types of variables you want to use for your data collection by clicking the buttons below.</string>
+    <string name="how_many_digits">How many digits?</string>
+    <string name="how_many_decimal_digits">How many digits and decimal digits?</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_comment">Add a comment</string>
+    <string name="name_column">Name column</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve"> AIzaSyAF5X1tbJuHX_wUDikxeJbUhAmX_9olLWk </string>
+    <string name="title_activity_save_file">SaveFileActivity</string>
+    <string name="unnamed_column">Unnamed column</string>
+    <string name="integer_string">INTEGER</string>
+    <string name="long_string">LONG</string>
+    <string name="text_string">TEXT</string>
+    <string name="coordinates_string">COORDINATES</string>
+    <string name="timestamp_string">TIMESTAMP</string>
+    <string name="enum_string">ENUM</string>
+    <string name="picture_string">PICTURE</string>
+
+</resources>

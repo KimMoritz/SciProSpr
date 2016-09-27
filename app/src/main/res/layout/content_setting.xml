@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:background="#e9e9e9">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/instruction_please_choose_variables"
+            android:id="@+id/textView5"
+            android:layout_gravity="center_horizontal" />
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="320dp"
+            android:id="@+id/listView" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:weightSum="1">
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="123"
+                    android:id="@+id/btnInt"
+                    android:layout_below="@+id/listView"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_weight="1"
+                    android:background="#0536fa"
+                    android:textColor="#ffffff" />
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="1.23"
+                    android:id="@+id/btnLon"
+                    android:layout_weight="1"
+                    android:background="#0536fa"
+                    android:textColor="#ffffff" />
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Text"
+                    android:id="@+id/btnStr"
+                    android:layout_weight="1"
+                    android:background="#0536fa"
+                    android:textColor="#ffffff" />
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="TAGS"
+                    android:id="@+id/btnEnum"
+                    android:layout_weight="1"
+                    android:background="#0536fa"
+                    android:textColor="#ffffff" />
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="GPS"
+                    android:id="@+id/btnGPS"
+                    android:layout_weight="1"
+                    android:background="#0536fa"
+                    android:textColor="#ffffff" />
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Photo"
+                    android:id="@+id/btnPho"
+                    android:layout_weight="1"
+                    android:background="#0536fa"
+                    android:textColor="#ffffff" />
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="DATE"
+                    android:id="@+id/btnDat"
+                    android:layout_weight="1"
+                    android:background="#0536fa"
+                    android:textColor="#ffffff" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DEL"
+                android:id="@+id/delBut"
+                android:layout_weight="1"
+                android:background="#b41b1b"
+                android:textColor="#ffffff" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Done"
+                android:id="@+id/btnDone"
+                android:layout_weight="1"
+                android:background="#1c6d09"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

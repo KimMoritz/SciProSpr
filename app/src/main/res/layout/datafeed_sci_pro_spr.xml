@@ -1,0 +1,225 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".Home"
+    android:background="#e9e9e9" >
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="75sp"
+        android:id = "@+id/display"
+        android:hint="Input value"
+        android:editable="false"
+        android:textIsSelectable="false" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/previnp"
+        android:text="Previous input:"
+        android:editable="false" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.09">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Column"
+            android:id="@+id/textView4"
+            android:layout_weight="1.45" />
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar"
+            android:max="5"
+            android:progress="0"
+            android:indeterminate="false"
+            android:layout_weight="1.45" />
+    </LinearLayout>
+
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="370dp"
+        android:layout_height="72dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingTop="20dp"
+        android:weightSum="1"
+        android:layout_weight="0.04">
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="130dp"
+            android:id = "@+id/seven"
+            android:text="7"
+            android:layout_weight="0.33"
+            android:backgroundTint="#0536fa"
+            android:background="#0536fa"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/abc_text_size_large_material" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="130dp"
+            android:id = "@+id/eight"
+            android:text="8"
+            android:layout_weight="0.33"
+            android:backgroundTint="#0536fa"
+            android:background="#0536fa"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/abc_text_size_large_material"
+            android:singleLine="false" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="128dp"
+            android:id = "@+id/nine"
+            android:text="9"
+            android:layout_weight="0.33"
+            android:backgroundTint="#0536fa"
+            android:background="#0536fa"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/abc_text_size_large_material" />
+    </LinearLayout>
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="350dp"
+        android:layout_height="72dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingTop="20dp"
+        android:weightSum="1"
+        android:layout_weight="0.05">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="113dp"
+            android:id = "@+id/four"
+            android:text="4"
+            android:layout_weight="0.37"
+            android:backgroundTint="#0536fa"
+            android:background="#0536fa"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/abc_text_size_large_material" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="129dp"
+            android:id = "@+id/five"
+            android:text="5"
+            android:layout_weight="0.37"
+            android:backgroundTint="#0536fa"
+            android:background="#0536fa"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/abc_text_size_large_material" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="131dp"
+            android:id = "@+id/six"
+            android:text="6"
+            android:layout_weight="0.37"
+            android:backgroundTint="#0536fa"
+            android:background="#0536fa"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/abc_text_size_large_material" />
+    </LinearLayout>
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="375dp"
+        android:layout_height="72dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingTop="20dp"
+        android:weightSum="1"
+        android:layout_weight="0.07">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="126dp"
+            android:id = "@+id/one"
+            android:text="1"
+            android:layout_weight="0.37"
+            android:backgroundTint="#0536fa"
+            android:background="#0536fa"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/abc_text_size_large_material" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="124dp"
+            android:id = "@+id/two"
+            android:text="2"
+            android:layout_weight="0.37"
+            android:backgroundTint="#0536fa"
+            android:background="#0536fa"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/abc_text_size_large_material" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="122dp"
+            android:id = "@+id/three"
+            android:text="3"
+            android:layout_weight="0.37"
+            android:backgroundTint="#0536fa"
+            android:background="#0536fa"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/abc_text_size_large_material" />
+    </LinearLayout>
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="363dp"
+        android:layout_height="72dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingTop="20dp"
+        android:weightSum="1">
+        <Button
+            android:layout_width="61dp"
+            android:layout_height="121dp"
+            android:id = "@+id/cancel"
+            android:text="C"
+            android:layout_weight="0.44"
+            android:backgroundTint="#1c6d09"
+            android:background="#1c6d09"
+            android:textColor="#ffffff" />
+        <Button
+            android:layout_width="61dp"
+            android:layout_height="125dp"
+            android:id = "@+id/zero"
+            android:text="0"
+            android:layout_weight="0.59"
+            android:backgroundTint="#0536fa"
+            android:background="#0536fa"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/abc_text_size_large_material" />
+
+        <Button
+            android:layout_width="49dp"
+            android:layout_height="114dp"
+            android:id="@+id/save"
+            android:text="Save"
+            android:backgroundTint="#1c6d09"
+            android:background="#1c6d09"
+            android:textColor="#ffffff" />
+
+        <Button
+            android:layout_width="66dp"
+            android:layout_height="110dp"
+            android:id="@+id/load"
+            android:text="Load"
+            android:backgroundTint="#1c6d09"
+            android:background="#1c6d09"
+            android:textColor="#ffffff" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="63dp"
+            android:text="Send"
+            android:id="@+id/sendButton"
+            android:background="#1c6d09"
+            android:textColor="#ffffff" />
+    </LinearLayout>
+
+</LinearLayout>
