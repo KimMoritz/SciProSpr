@@ -1,16 +1,8 @@
 package com.example.kitz0001.sciprospr;
 
-import android.graphics.Picture;
-import android.graphics.drawable.Icon;
-import android.media.Image;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.widget.ImageView;
-import android.widget.Switch;
-
 import java.util.ArrayList;
-import java.util.Objects;
-
 
 public class DataColumn implements Parcelable{
     private int dataIcon;
@@ -86,7 +78,6 @@ public class DataColumn implements Parcelable{
     public void addValue(String s){value.add(s);}
 
     public int getValueSize(){return value.size();}
-
 
     @Override
     public int describeContents() {

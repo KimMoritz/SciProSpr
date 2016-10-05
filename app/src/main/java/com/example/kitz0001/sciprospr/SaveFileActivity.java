@@ -1,12 +1,10 @@
 package com.example.kitz0001.sciprospr;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,8 +12,6 @@ import android.widget.Switch;
 import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
@@ -23,20 +19,18 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
 
     EditText fileName;
     EditText emailAddress;
-    Switch emailSwitch, driveSwitch, devStorageSwitch;
+    Switch emailSwitch, devStorageSwitch;
     ArrayList<DataColumn> dataColumns;
     String fileNameString;
     String emailString;
-    Uri path;
+    Uri uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_save_file);
-        path=null;
         fileName = (EditText) findViewById(R.id.fileName);
         emailSwitch = (Switch) findViewById(R.id.emailSwitch);
-        driveSwitch = (Switch) findViewById(R.id.driveSwitch);
         devStorageSwitch = (Switch) findViewById(R.id.devStorageSwitch);
         Button saveButton = (Button) findViewById(R.id.saveButton);
         Intent sendIntent = getIntent();
@@ -47,7 +41,6 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
             saveButton.setOnClickListener(this);}
         catch (Exception e){}
     }
-
 
     @Override
     public void onClick(View click) {
@@ -60,33 +53,29 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
 
     private void saveFile(){
         fileNameString = fileName.getText().toString().concat(".txt");
-
         if(devStorageSwitch.isChecked()){
             saveOnDevice(fileNameString);
         }
         if(emailSwitch.isChecked()){
-            sendEmail(fileNameString);
+            prepareEmail();
         }
-        if(driveSwitch.isChecked()){
-            uploadToDrive(/*fileNameString*/);
-        }
-
     }
 
-    private void sendEmail(String name){
+    private void prepareEmail(){
+        openFile();
+    }
 
+    private void sendEmail(){
         try {
-            emailString = emailAddress.getText().toString();
+            emailString = "kim.moritz@hotmail.com"; //emailAddress.getText().toString(); TODO: Change to accept user input text from text field instead when function is working
             if (emailString.length()==0){
                 throw new Exception();
             }
-            File filelocation = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), name);
-            path = Uri.fromFile(filelocation);
             Intent emailIntent = new Intent(Intent.ACTION_SEND);
-            emailIntent.setType("vnd.android.cursor.dir/email");
+            emailIntent.setType("text/plain");
             String to[]={emailString};
             emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
-            emailIntent.putExtra(Intent.EXTRA_STREAM, path.getPath());
+            emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
             startActivity(Intent.createChooser(emailIntent, "Send email..."));
         } catch (Exception e) {
@@ -94,27 +83,40 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private void uploadToDrive(/*String name*/){}
-
     public void saveOnDevice(String name){
             try {
-                FileOutputStream fileout = openFileOutput(name, Context.MODE_PRIVATE);
-                OutputStreamWriter outputWriter = new OutputStreamWriter(fileout);
-                StringBuilder sb = new StringBuilder();
+                File fileDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+                File fileForOutPut = new File(fileDirectory, name);
+                FileOutputStream fileout = new FileOutputStream(fileForOutPut);
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileout);
+                StringBuilder stringBuilder = new StringBuilder();
                 for (int h = 0; h < dataColumns.size(); h++) {
                     for (int m = 0; m < dataColumns.get(h).getValueSize(); m++) {
                         String testText;
                         testText = dataColumns.get(h).getValue(m);
-                        sb.append(" C" + Integer.toString(h) + "R"+ Integer.toString(m) + ":" + testText);
+                        stringBuilder.append(" C" + Integer.toString(h) + "R"+ Integer.toString(m) + ":" + testText);
                     }
                 }
-                outputWriter.write(sb.toString());
-                outputWriter.close();
+                outputStreamWriter.write(stringBuilder.toString());
+                outputStreamWriter.close();
                 fileout.close();
                 Toast.makeText(this, "File saved as " + fileNameString, Toast.LENGTH_SHORT).show();
-
             } catch (Throwable t) {
                 Toast.makeText(this, "Error while saving the file", Toast.LENGTH_SHORT).show();
             }
         }
+
+    public void openFile() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.putExtra("return-data", true);
+        startActivityForResult(Intent.createChooser(intent, "Choose file using..."), 101);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 101 && resultCode == RESULT_OK) {
+            uri = data.getData();
+            sendEmail();
+        }
+    }
 }

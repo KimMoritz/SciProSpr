@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gdata.data.DateTime;
 import java.io.BufferedReader;
@@ -36,20 +35,16 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 0;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     Button one, two, three, four, five, six, seven, eight, nine, zero, cancel, save, load, send;
-    EditText disp, prev;
-    ProgressBar prog;
-    int op1, op2;
+    EditText disp, prev, rowOrSampleNo;
     ArrayList<Integer> textLength;
-    private int i = 0, j = 0;
+    private int j = 0;
     ArrayList<DataColumn> dataColumns2;
-    public static final String TAG = Datafeed.class.getSimpleName();
     private LatLng latLng;
     String mLatitudeText, mLongiitudeText;
     private LocationManager locationManager;
     private String provider;
 
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         Intent dataIntent = getIntent();
         dataColumns2 = dataIntent.getParcelableArrayListExtra("DataColumns");
@@ -81,8 +76,8 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         load = (Button) findViewById(R.id.load);
         send = (Button) findViewById(R.id.sendButton);
         disp = (EditText) findViewById(R.id.display);
-        prev = (EditText) findViewById(R.id.previnp);
-        prog = (ProgressBar) findViewById(R.id.progressBar);
+        prev = (EditText) findViewById(R.id.previnp); //TODO:Change name to something informative
+        rowOrSampleNo = (EditText) findViewById(R.id.rowOrSampleNumber);
 
         //TODO: use inner classes instead? Compare Core Java I: chapter about event handling
         try {
@@ -118,7 +113,7 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
     }
 
     @Override
-    public void onClick(View arg0) {
+    public void onClick(View arg0) { //TODO: Make a separate class for handling datafeed? Would clean up the activity class.
         Editable str = disp.getText();
         switch (arg0.getId()) {
             case R.id.zero: disp.setText(str.append(zero.getText())); break;
@@ -147,8 +142,7 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
                 startActivity(sendIntent);
                 break;
         }
-
-        // Choose function depending on data type
+        // Choose function depending on data type  TODO: break out to separate function and change to enum
         DataColumn currentDC = dataColumns2.get(j);
         String dataType = currentDC.getType();
         switch (dataType){
@@ -171,9 +165,9 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
                 getPhoto();
                 break;
         }
+        updateCurrentColumnDisplay(j);
     }
 
-    //TODO: Make text input available (softinput keyboard?)
     public void inputText(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.add_comment));
@@ -191,7 +185,6 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
             public void onClick(DialogInterface dialog, int which) {
                 String inputVar2;
                 inputVar2 = input.getText().toString();
-                prev.setText(inputVar2);
                 DataColumn dc = dataColumns2.get(j);
                 dc.addValue(inputVar2);
                 dataColumns2.set(j, dc);
@@ -203,7 +196,6 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
             public void onClick(DialogInterface dialog, int which) {
                 String inputVar2;
                 inputVar2 = "No comment";
-                prev.setText(inputVar2);
                 DataColumn dc = dataColumns2.get(j);
                 dc.addValue(inputVar2);
                 dataColumns2.set(j, dc);
@@ -211,22 +203,17 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
             }
         });
         builder.show();
-        prog.setProgress(prog.getProgress() + 1);
         j++;
         disp.setText("");
         //New row, start over from first column)
         if (j == dataColumns2.size()-1) {
             j = 0;
-            prog.setProgress(0);
         }
     }
 
     public void inputInt(){
         if (disp.getText().length() >= textLength.get(j)) {
-            prog.setMax(dataColumns2.get(j).getDigits() + 1);
             String inputvar2 = disp.getText().toString();
-            prev.setText(inputvar2);
-            prog.setProgress(prog.getProgress() + 1);
             DataColumn dc = dataColumns2.get(j);
             dc.addValue(inputvar2);
             dataColumns2.set(j, dc);
@@ -235,9 +222,8 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
             //New row, start over from first column
             if (j == dataColumns2.size()-1) {
                 j = 0;
-                prog.setProgress(0);
-            }
-        }
+            } //end inner if
+        }//end outer if
     }
 
     //TODO: Remove textLength arraylist and just use dataColumns2.get(j).getDigits() ?
@@ -247,25 +233,20 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
             int declength = dc2.getDecimals();
             if(disp.getText().length() == textLength.get(j)){
                 Editable str = disp.getText();
-                prog.setMax(dataColumns2.get(j).getDigits() + 1);
                 disp.setText(str.append("."));}
             else if(disp.getText().length()  >= textLength.get(j) + declength +1 ){
                 String inputVar3 = disp.getText().toString();
-                prev.setText(inputVar3);
-                prog.setProgress(prog.getProgress() + 1);
                 DataColumn dc = dataColumns2.get(j);
                 dc.addValue(inputVar3);
                 dataColumns2.set(j, dc);
                 j++;
                 disp.setText("");
-                prog.setProgress(0);
                 //New row, start over from first column)
                 if (j == dataColumns2.size()-1) {
                     j = 0;
-                    prog.setProgress(0);
-                }
-            }
-        }
+                } //end inner if
+            } //end middle if/else if
+        } //en outer if
     }
 
     public void inputGPS(){
@@ -277,7 +258,6 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         //New row, start over from first column)
         if (j == dataColumns2.size()-1) {
             j = 0;
-            prog.setProgress(0);
         }
     }
 
@@ -291,32 +271,39 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         //New row, start over from first column)
         if (j == dataColumns2.size()-1) {
             j = 0;
-            prog.setProgress(0);
         }
-
     }
 
-    public void getPhoto() {
-
-    }
+    public void getPhoto() {}
 
     public String getCoordinates() {
         return latLng.toString();
+    }
+
+    private void updateCurrentColumnDisplay(int index){     //Inspect whether it is a variable that requires input. If so write it to the current tpe-field.
+        if (!dataColumns2.get(index).getType().equals("COORDINATES") && !dataColumns2.get(index).getType().equals("TIMESTAMP") && !dataColumns2.get(index).getName().equals("Padding end column")) {
+            String updated = dataColumns2.get(index).getType() + " " + dataColumns2.get(index).getName();
+            prev.setText(updated);
+            String rowString = ""+(j+1);
+            rowOrSampleNo.setText(rowString);
+        }else{                                      // Otherwise, recursively inspect the next element until the criterion is fulfilled.
+            updateCurrentColumnDisplay(index+1);
+        }
     }
 
     public void saveToFile() {
         try {
             FileOutputStream fileout = openFileOutput("SciProSprFile.txt", Context.MODE_PRIVATE);
             OutputStreamWriter outputWriter = new OutputStreamWriter(fileout);
-            StringBuilder sb = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder();
             for (int h = 0; h < dataColumns2.size(); h++) {
                 for (int m = 0; m < dataColumns2.get(h).getValueSize(); m++) {
                     String testText;
                     testText = dataColumns2.get(h).getValue(m);
-                    sb.append(" C" + Integer.toString(h) + "R"+ Integer.toString(m) + ":" + testText);
+                    stringBuilder.append(" C" + Integer.toString(h) + "R"+ Integer.toString(m) + ":" + testText);
                 }
             }
-            outputWriter.write(sb.toString());
+            outputWriter.write(stringBuilder.toString());
             outputWriter.close();
             fileout.close();
             disp.setText("");
@@ -325,7 +312,6 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
             String err = "Error";
             disp.setText(err);
         }
-
     }
 
     public void loadFromFile() {
@@ -369,8 +355,7 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 } else {
                     // Permission Denied
-                    Toast.makeText(this, "ACCESS_COARSE_LOCATION Denied", Toast.LENGTH_SHORT)
-                            .show();
+                    Toast.makeText(this, "ACCESS_COARSE_LOCATION Denied", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION:
@@ -378,8 +363,7 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
                     // Permission Granted
                 } else {
                     // Permission Denied
-                    Toast.makeText(this, "ACCESS_FINE_LOCATION Denied", Toast.LENGTH_SHORT)
-                            .show();
+                    Toast.makeText(this, "ACCESS_FINE_LOCATION Denied", Toast.LENGTH_SHORT).show();
                 }
                 break;
             default:
@@ -393,15 +377,12 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
     }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
+    public void onStatusChanged(String provider, int status, Bundle extras) {}
 
     @Override
     public void onProviderEnabled(String provider) {
         Toast.makeText(this, "Enabled new provider " + provider,
                 Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
@@ -414,16 +395,8 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
     public void onPause() {
         super.onPause();
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         locationManager.removeUpdates(this);
     }
-
-}
+}//end of activity class

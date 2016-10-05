@@ -18,13 +18,6 @@
         android:editable="false"
         android:textIsSelectable="false" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/previnp"
-        android:text="Previous input:"
-        android:editable="false" />
-
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -36,18 +29,37 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Column"
-            android:id="@+id/textView4"
-            android:layout_weight="1.45" />
+            android:id="@+id/textViewColumn"
+            android:layout_weight="0.56"
+            android:editable="true" />
 
-        <ProgressBar
-            style="?android:attr/progressBarStyleHorizontal"
+        <EditText
+            android:layout_width="151dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/previnp"
+            android:editable="false"
+            android:layout_weight="1.21" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="41dp">
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/progressBar"
-            android:max="5"
-            android:progress="0"
-            android:indeterminate="false"
-            android:layout_weight="1.45" />
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Row / Sample"
+            android:id="@+id/textViewRow" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rowOrSampleNumber"
+            android:layout_weight="1"
+            android:editable="true" />
     </LinearLayout>
 
     <LinearLayout android:orientation="horizontal"

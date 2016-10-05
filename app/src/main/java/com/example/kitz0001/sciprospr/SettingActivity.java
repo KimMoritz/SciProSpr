@@ -9,17 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
-import java.util.ArrayList;
-import java.util.List;
+import android.widget.*;
+import java.util.*;
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener  {
     private List<DataColumn> dataCols = new ArrayList<>();
@@ -27,23 +19,23 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     private String inputText2 = "";
     public DataColumn col = null;
     private boolean padded = false;
+    private boolean requiresInput = false;
+    Button butInt, butLng, butStr, butGPS, butPho, butDat, butDel, butDon, butEnum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         populateListView();
-
-        //Button links required
-        Button butInt = (Button) findViewById(R.id.btnInt);
-        Button butLng = (Button) findViewById(R.id.btnLon);
-        Button butStr = (Button) findViewById(R.id.btnStr);
-        Button butGPS = (Button) findViewById(R.id.btnGPS);
-        Button butPho = (Button) findViewById(R.id.btnPho);
-        Button butDat = (Button) findViewById(R.id.btnDat);
-        Button butDel = (Button) findViewById(R.id.delBut);
-        Button butDon = (Button) findViewById(R.id.btnDone);
-        Button butEnum = (Button) findViewById(R.id.btnEnum);
+        butInt = (Button) findViewById(R.id.btnInt);
+        butLng = (Button) findViewById(R.id.btnLon);
+        butStr = (Button) findViewById(R.id.btnStr);
+        butGPS = (Button) findViewById(R.id.btnGPS);
+        butPho = (Button) findViewById(R.id.btnPho);
+        butDat = (Button) findViewById(R.id.btnDat);
+        butDel = (Button) findViewById(R.id.delBut);
+        butDon = (Button) findViewById(R.id.btnDone);
+        butEnum = (Button) findViewById(R.id.btnEnum);
         try{
             butInt.setOnClickListener(this);
             butLng.setOnClickListener(this);
@@ -60,14 +52,13 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
     private void populateListView() {
         //Add objects to the list of data columns
-        ArrayAdapter<DataColumn> adapter = new MyListAdapter();
+        ArrayAdapter<DataColumn> adapter = new TableListAdapter(SettingActivity.this,R.layout.item_view, (ArrayList) dataCols);
         ListView list = (ListView) findViewById(R.id.listView);
         assert list != null;
         list.setAdapter(adapter);
     }
 
     @Override
-    //What happens when which button is clicked.
     public void onClick(View arg0) {
         if(padded&arg0.getId()!=R.id.btnDone){
             dataCols.remove(dataCols.size()-1);
@@ -75,43 +66,52 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         }
         switch(arg0.getId()){
             case R.id.btnInt:
-                askForName("INTEGER");
+                askForName(getString(R.string.integer_string));
+                requiresInput=true;
                 break;
             case R.id.btnLon:
-                askForName("LONG");
+                askForName(getString(R.string.long_string));
+                requiresInput=true;
                 break;
             case R.id.btnStr:
-                askForName("TEXT");
+                askForName(getString(R.string.text_string));
+                requiresInput=true;
                 break;
             case R.id.btnGPS:
-                askForName("COORDINATES");
+                askForName(getString(R.string.coordinates_string));
                 break;
             case R.id.btnDat:
-                askForName("TIMESTAMP");
+                askForName(getString(R.string.timestamp_string));
                 break;
             case R.id.btnEnum:
-                //askForName("ENUM");
+                askForName(getString(R.string.enum_string));
                 break;
             case R.id.btnPho:
-                //askForName("PICTURE");
+                //askForName(getString(R.string.picture_string));
                 break;
             case R.id.delBut:
                 dataCols.clear();
                 padded = false;
+                requiresInput=false;
                 break;
             case R.id.btnDone:
                 Intent intentInput = new Intent(SettingActivity.this, Datafeed.class);
                 if(dataCols.isEmpty()){
-                    dataCols.add(0, new DataColumn("TEXT", "Column A"));
-                    dataCols.add(1, new DataColumn("TEXT", "Column B"));
-                    dataCols.add(2, new DataColumn("TEXT", "Column C"));
-                    dataCols.add(3, new DataColumn("TEXT", "Column D"));
-                } else if (!padded) {
-                    dataCols.add(new DataColumn("TEXT", "Padding end column"));
-                    padded=true;
+                    dataCols.add(0, new DataColumn(getString(R.string.integer_string), "Column A"));
+                    dataCols.add(1, new DataColumn(getString(R.string.integer_string), "Column B"));
+                    dataCols.add(2, new DataColumn(getString(R.string.integer_string), "Column C"));
+                    dataCols.add(3, new DataColumn(getString(R.string.integer_string), "Column D"));
                 }
-                intentInput.putParcelableArrayListExtra("DataColumns" , (ArrayList<DataColumn>) dataCols);
-                startActivity(intentInput);
+                if(requiresInput){
+                    if (!padded) {
+                        dataCols.add(new DataColumn(getString(R.string.text_string), "Padding end column"));
+                        padded=true;
+                    }
+                    intentInput.putParcelableArrayListExtra("DataColumns" , (ArrayList<DataColumn>) dataCols);
+                    startActivity(intentInput);
+                }else{
+                    Toast.makeText(this, "At least one column must be of a data type that requires user input (integer, long, tag or text)", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
         populateListView();
@@ -138,10 +138,10 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 dataCols.add(new DataColumn(type, inputText));
                 imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
                 col = dataCols.get(dataCols.size() - 1);
-                if(col.getType().equals("INTEGER") | col.getType().equals("TEXT")){
+                if(col.getType().equals(getString(R.string.integer_string)) | col.getType().equals(getString(R.string.text_string))){
                     askNoDigits(col);
                 }
-                if (col.getType().equals("LONG")){
+                if (col.getType().equals(getString(R.string.long_string))){
                     askLongDigits(col);
                 }
             }
@@ -154,6 +154,14 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
         builder.show();
+    }
+
+    void setStrings(int number){                //TODO: Complete function.
+        String[] tags = new String[number];
+        for(String tag : tags){
+            tag = "";
+        }
+        TagSet tagSet = new TagSet(tags);
     }
 
     //Dialog for setting number of digits of the columns (as integers in DataColumn objects)
@@ -192,8 +200,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         builder.show();
     }
 
-    protected void askLongDigits (final DataColumn dc){ //TODO: merge with above method to avoid code duplications.
-                                                        //TODO: split into several methods (too long).
+    protected void askLongDigits (final DataColumn dc){ //TODO: split into several methods ( much too long). Synergy between data type specific digit-askers.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LinearLayout lila1= new LinearLayout(this);
         lila1.setOrientation(LinearLayout.VERTICAL);
@@ -242,31 +249,5 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
         builder.show();
-    }
-
-    private class MyListAdapter extends ArrayAdapter<DataColumn> {  //Make package private and move to a separate class file.
-        public MyListAdapter() {
-            super(SettingActivity.this, R.layout.item_view, dataCols);
-        }
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // Fill out the view that the visual list representation presents.
-            View itemView = convertView;
-            if (itemView == null) {
-                //Populate using inflater.
-                itemView = getLayoutInflater().inflate(R.layout.item_view, parent, false);
-            }
-            DataColumn chosenColumn = dataCols.get(position);
-
-            //Fill out icon, name and data type.
-            ImageView makeIcon = (ImageView) itemView.findViewById(R.id.imageView);
-            makeIcon.setImageResource(chosenColumn.getIcon());
-            TextView makeText = (TextView) itemView.findViewById(R.id.colName);
-            makeText.setText(chosenColumn.getName());
-            TextView makeText2 = (TextView) itemView.findViewById(R.id.dataTyp);
-            makeText2.setText(chosenColumn.getType());
-
-            return itemView;
-        }
     }
 }
