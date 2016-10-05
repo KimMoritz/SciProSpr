@@ -19,5 +19,9 @@
     <string name="timestamp_string">TIMESTAMP</string>
     <string name="enum_string">ENUM</string>
     <string name="picture_string">PICTURE</string>
+    <string name="no_digits">no. of digits</string>
+    <string name="no_decimals">no. of decimals</string>
+    <string name="how_many_tags">How many unique tags ("Enums")?</string>
+    <string name="unnamed_tag">unnamed_tag</string>
 
 </resources>

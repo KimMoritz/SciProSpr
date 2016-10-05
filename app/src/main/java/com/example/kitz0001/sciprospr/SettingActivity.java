@@ -36,16 +36,11 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         butDel = (Button) findViewById(R.id.delBut);
         butDon = (Button) findViewById(R.id.btnDone);
         butEnum = (Button) findViewById(R.id.btnEnum);
+        Button[] buttonArray = {butInt, butLng, butStr, butGPS, butPho, butDat, butDel, butDon, butEnum};
         try{
-            butInt.setOnClickListener(this);
-            butLng.setOnClickListener(this);
-            butStr.setOnClickListener(this);
-            butGPS.setOnClickListener(this);
-            butPho.setOnClickListener(this);
-            butDel.setOnClickListener(this);
-            butDon.setOnClickListener(this);
-            butDat.setOnClickListener(this);
-            butEnum.setOnClickListener(this);
+            for(Button button:buttonArray){
+                button.setOnClickListener(this);
+            }
         }
         catch (Exception e){}
     }
@@ -66,28 +61,28 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         }
         switch(arg0.getId()){
             case R.id.btnInt:
-                askForName(getString(R.string.integer_string));
+                askForName(dataTypeEnum.INTEGER);
                 requiresInput=true;
                 break;
             case R.id.btnLon:
-                askForName(getString(R.string.long_string));
+                askForName(dataTypeEnum.LONG);
                 requiresInput=true;
                 break;
             case R.id.btnStr:
-                askForName(getString(R.string.text_string));
+                askForName(dataTypeEnum.TEXT);
                 requiresInput=true;
                 break;
             case R.id.btnGPS:
-                askForName(getString(R.string.coordinates_string));
+                askForName(dataTypeEnum.COORDINATES);
                 break;
             case R.id.btnDat:
-                askForName(getString(R.string.timestamp_string));
+                askForName(dataTypeEnum.TIMESTAMP);
                 break;
             case R.id.btnEnum:
-                askForName(getString(R.string.enum_string));
+                askForName(dataTypeEnum.TAGS);
                 break;
             case R.id.btnPho:
-                //askForName(getString(R.string.picture_string));
+                //askForName(dataTypeEnum.PHOTO);
                 break;
             case R.id.delBut:
                 dataCols.clear();
@@ -97,14 +92,15 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.btnDone:
                 Intent intentInput = new Intent(SettingActivity.this, Datafeed.class);
                 if(dataCols.isEmpty()){
-                    dataCols.add(0, new DataColumn(getString(R.string.integer_string), "Column A"));
-                    dataCols.add(1, new DataColumn(getString(R.string.integer_string), "Column B"));
-                    dataCols.add(2, new DataColumn(getString(R.string.integer_string), "Column C"));
-                    dataCols.add(3, new DataColumn(getString(R.string.integer_string), "Column D"));
+                    dataCols.add(0, new DataColumn(dataTypeEnum.INTEGER, "Column A"));
+                    dataCols.add(1, new DataColumn(dataTypeEnum.INTEGER, "Column B"));
+                    dataCols.add(2, new DataColumn(dataTypeEnum.INTEGER, "Column C"));
+                    dataCols.add(3, new DataColumn(dataTypeEnum.INTEGER, "Column D"));
+                    requiresInput=true;
                 }
                 if(requiresInput){
                     if (!padded) {
-                        dataCols.add(new DataColumn(getString(R.string.text_string), "Padding end column"));
+                        dataCols.add(new DataColumn(dataTypeEnum.TEXT, "Padding end column"));
                         padded=true;
                     }
                     intentInput.putParcelableArrayListExtra("DataColumns" , (ArrayList<DataColumn>) dataCols);
@@ -118,7 +114,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     //Dialog for getting names of the columns (as strings in objects)
-    protected void askForName(final String type){
+    protected void askForName(final dataTypeEnum type){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.name_column));
         final EditText input = new EditText(this);
@@ -138,11 +134,12 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 dataCols.add(new DataColumn(type, inputText));
                 imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
                 col = dataCols.get(dataCols.size() - 1);
-                if(col.getType().equals(getString(R.string.integer_string)) | col.getType().equals(getString(R.string.text_string))){
+                if(col.getType().equals(dataTypeEnum.INTEGER) | col.getType().equals(dataTypeEnum.TEXT)){
                     askNoDigits(col);
-                }
-                if (col.getType().equals(getString(R.string.long_string))){
+                } else if (col.getType().equals(dataTypeEnum.LONG)){
                     askLongDigits(col);
+                } else if(col.getType().equals(dataTypeEnum.TAGS)){
+                    askTags(col);
                 }
             }
         });
@@ -156,12 +153,82 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         builder.show();
     }
 
-    void setStrings(int number){                //TODO: Complete function.
-        String[] tags = new String[number];
+    void askTags(final DataColumn dc){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.how_many_tags));
+        final EditText digits = new EditText(this);
+        InputFilter[] filter = new InputFilter[1];
+        filter[0] = new InputFilter.LengthFilter(1);
+        digits.setFilters(filter);
+        //use screen keyboard
+        final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        digits.setInputType(InputType.TYPE_CLASS_NUMBER);
+        digits.requestFocus();
+        builder.setView(digits);
+        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (digits.length()<1){
+                    digits.setText(R.string.unnamed_tag);
+                }
+                inputText = digits.getText().toString();
+                int inputInt = Integer.parseInt(inputText);
+                dc.setDigits(inputInt);
+                imm.hideSoftInputFromWindow(digits.getWindowToken(), 0);
+
+            }
+        });
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dc.setDigits(1);
+                imm.hideSoftInputFromWindow(digits.getWindowToken(), 0);
+            }
+        });
+        builder.show();
+        setTags(dc);
+    }
+
+    void setTags(final DataColumn dc){                //TODO: Complete function.
+
+        String[] tags = new String[dc.getDigits()];
         for(String tag : tags){
-            tag = "";
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.how_many_tags));
+            final EditText digits = new EditText(this);
+            InputFilter[] filter = new InputFilter[1];
+            filter[0] = new InputFilter.LengthFilter(1);
+            digits.setFilters(filter);
+            //use screen keyboard
+            final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+            digits.setInputType(InputType.TYPE_CLASS_NUMBER);
+            digits.requestFocus();
+            builder.setView(digits);
+            builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (digits.length()<1){
+                        digits.setText(R.string.unnamed_tag);
+                    }
+                    inputText = digits.getText().toString();
+                    int inputInt = Integer.parseInt(inputText);
+                    dc.setDigits(inputInt);
+                    imm.hideSoftInputFromWindow(digits.getWindowToken(), 0);
+                }
+            });
+            builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            builder.show();
+            tag = inputText;
         }
         TagSet tagSet = new TagSet(tags);
+        dc.setTagSet(tagSet);
     }
 
     //Dialog for setting number of digits of the columns (as integers in DataColumn objects)
@@ -206,9 +273,9 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         lila1.setOrientation(LinearLayout.VERTICAL);
         builder.setTitle(getString(R.string.how_many_decimal_digits));
         final EditText digits = new EditText(this);
-        digits.setHint("no. of digits");
+        digits.setHint(R.string.no_digits);
         final EditText deci = new EditText(this);
-        deci.setHint("no. of decimals");
+        deci.setHint(R.string.no_decimals);
         InputFilter[] filter = new InputFilter[1];
         filter[0] = new InputFilter.LengthFilter(1);
         digits.setFilters(filter);

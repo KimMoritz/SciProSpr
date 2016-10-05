@@ -5,46 +5,48 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 public class DataColumn implements Parcelable{
-    private int dataIcon;
-    private String dataType;
+    private int digits = 2, decimals = 1, dataIcon;
+    private dataTypeEnum dataType;
     private String columnName;
-    private int digits = 2;
     private ArrayList<String> value =new ArrayList<>();
-    private int decimals = 1;
+    private TagSet tagSet;
 
-    public DataColumn(String dataType, String columnName){
+    public DataColumn(dataTypeEnum dataType, String columnName){
         this.dataType = dataType;
         this.dataIcon = 0;
         this.value= new ArrayList<>();
         switch(dataType){
-            case "INTEGER":// TODO: Change all strings to string references
+            case INTEGER:
                 this.dataIcon=R.drawable.integer;
                 break;
-            case "LONG":
+            case LONG:
                 this.dataIcon=R.drawable.lng;
                 break;
-            case "TEXT":
+            case TEXT:
                 this.dataIcon=R.drawable.text;
                 break;
-            case "COORDINATES":
+            case COORDINATES:
                 this.dataIcon=R.drawable.position;
                 break;
-            case "TIMESTAMP":
+            case TIMESTAMP:
                 this.dataIcon=R.drawable.date;
                 break;
-            case "PICTURE":
+            case PICTURE:
                 this.dataIcon=R.drawable.pic;
+                break;
+            case TAGS:
+                this.dataIcon=R.drawable.text;
                 break;
         }
         this.columnName = columnName;
     }
 
-    protected DataColumn(Parcel in) {
-        dataIcon = in.readInt();
-        dataType = in.readString();
-        columnName = in.readString();
-        digits = in.readInt();
-        decimals = in.readInt();
+    protected DataColumn(Parcel inParcel) {
+        dataIcon = inParcel.readInt();
+        dataType = (dataTypeEnum) inParcel.readSerializable();
+        columnName = inParcel.readString();
+        digits = inParcel.readInt();
+        decimals = inParcel.readInt();
     }
 
     public static final Creator <DataColumn> CREATOR = new Creator<DataColumn>() {
@@ -61,7 +63,7 @@ public class DataColumn implements Parcelable{
 
     public int getIcon(){return dataIcon;}
 
-    public String getType(){ return dataType;}
+    public dataTypeEnum getType(){ return dataType;}
 
     public String getName(){ return columnName;}
 
@@ -79,6 +81,14 @@ public class DataColumn implements Parcelable{
 
     public int getValueSize(){return value.size();}
 
+    public void setTagSet(TagSet tagSetIn){
+        tagSet = tagSetIn;
+    }
+
+    public TagSet getTagSet(){
+        return tagSet;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -87,7 +97,7 @@ public class DataColumn implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(dataIcon);
-        dest.writeString(dataType);
+        dest.writeSerializable(dataType);
         dest.writeString(columnName);
         dest.writeInt(digits);
         dest.writeInt(decimals);

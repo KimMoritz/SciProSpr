@@ -30,7 +30,7 @@ class TableListAdapter extends ArrayAdapter<DataColumn> {
         TextView makeText = (TextView) itemView.findViewById(R.id.colName);
         makeText.setText(chosenColumn.getName());
         TextView makeText2 = (TextView) itemView.findViewById(R.id.dataTyp);
-        makeText2.setText(chosenColumn.getType());
+        makeText2.setText(chosenColumn.getType().toString());
         return itemView;
     }
 }

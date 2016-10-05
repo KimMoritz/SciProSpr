@@ -53,7 +53,6 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         mLongiitudeText = "startLong";
         super.onCreate(savedInstanceState);
         textLength = new ArrayList<>();
-
         for (int o = 0; o < dataColumns2.size() - 1; o++) {
             DataColumn dc = dataColumns2.get(o);
             Integer digs = dc.getDigits();
@@ -144,24 +143,24 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         }
         // Choose function depending on data type  TODO: break out to separate function and change to enum
         DataColumn currentDC = dataColumns2.get(j);
-        String dataType = currentDC.getType();
+        dataTypeEnum dataType = currentDC.getType();
         switch (dataType){
-            case "COORDINATES":
+            case COORDINATES:
                 inputGPS();
                 break;
-            case "INTEGER":
+            case INTEGER:
                 inputInt();
                 break;
-            case "LONG":
+            case LONG:
                 inputLng();
                 break;
-            case "TEXT":
+            case TEXT:
                 inputText();
                 break;
-            case "TIMESTAMP":
+            case TIMESTAMP:
                 inputTime();
                 break;
-            case "PICTURE":
+            case PICTURE:
                 getPhoto();
                 break;
         }
