@@ -3,11 +3,12 @@ package com.example.kitz0001.sciprospr;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TagSet implements Parcelable{
-    private List<String> tagNames;
+public class TagSet implements Parcelable, Serializable{
+    List<String> tagNames;
 
     TagSet(String[] names){
         tagNames = new ArrayList<>();
@@ -55,6 +56,6 @@ public class TagSet implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        dest.writeList(tagNames);
     }
 }

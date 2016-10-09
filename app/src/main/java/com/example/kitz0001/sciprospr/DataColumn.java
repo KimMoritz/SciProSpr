@@ -2,6 +2,8 @@ package com.example.kitz0001.sciprospr;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class DataColumn implements Parcelable{
@@ -9,7 +11,7 @@ public class DataColumn implements Parcelable{
     private dataTypeEnum dataType;
     private String columnName;
     private ArrayList<String> value =new ArrayList<>();
-    private TagSet tagSet;
+    private ArrayList<String> tagSet;
 
     public DataColumn(dataTypeEnum dataType, String columnName){
         this.dataType = dataType;
@@ -49,6 +51,7 @@ public class DataColumn implements Parcelable{
         columnName = inParcel.readString();
         digits = inParcel.readInt();
         decimals = inParcel.readInt();
+        tagSet = (TagSet) inParcel.readSerializable();
     }
 
     public static final Creator <DataColumn> CREATOR = new Creator<DataColumn>() {
@@ -108,5 +111,6 @@ public class DataColumn implements Parcelable{
         dest.writeString(columnName);
         dest.writeInt(digits);
         dest.writeInt(decimals);
+        dest.writeSerializable(tagSet);
     }
 }
