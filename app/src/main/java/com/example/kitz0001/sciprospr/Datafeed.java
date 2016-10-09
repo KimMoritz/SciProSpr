@@ -34,10 +34,10 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 0;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    private int j = 0, rowInt=1;
     Button one, two, three, four, five, six, seven, eight, nine, zero, cancel, save, load, send;
     EditText disp, prev, rowOrSampleNo;
     ArrayList<Integer> textLength;
-    private int j = 0;
     ArrayList<DataColumn> dataColumns2;
     private LatLng latLng;
     String mLatitudeText, mLongiitudeText;
@@ -141,7 +141,7 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
                 startActivity(sendIntent);
                 break;
         }
-        // Choose function depending on data type  TODO: break out to separate function and change to enum
+        // Choose function depending on data type  TODO: break out to separate function
         DataColumn currentDC = dataColumns2.get(j);
         dataTypeEnum dataType = currentDC.getType();
         switch (dataType){
@@ -163,8 +163,27 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
             case PICTURE:
                 getPhoto();
                 break;
+            case TAGS:
+                inputTag();
+                break;
         }
         updateCurrentColumnDisplay(j);
+    }
+
+    private void inputTag() {
+            final DataColumn dc = dataColumns2.get(j);
+            final String [] tagArray = dc.getTagSet();//{"Tag1", "tag2"}; //  //TODO: change test strings to import of tags specified in settings
+            AlertDialog.Builder builder = new AlertDialog.Builder(Datafeed.this);
+            builder.setTitle(R.string.Set_tag_name)
+                    .setItems(tagArray, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            String inputVar2 = tagArray[which];
+                            dc.addValue(inputVar2);
+                            dataColumns2.set(j, dc);
+                        }
+                    });
+             builder.show();
+        j++;
     }
 
     public void inputText(){
@@ -207,6 +226,7 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         //New row, start over from first column)
         if (j == dataColumns2.size()-1) {
             j = 0;
+            rowInt++;
         }
     }
 
@@ -221,6 +241,7 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
             //New row, start over from first column
             if (j == dataColumns2.size()-1) {
                 j = 0;
+                rowInt++;
             } //end inner if
         }//end outer if
     }
@@ -243,6 +264,7 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
                 //New row, start over from first column)
                 if (j == dataColumns2.size()-1) {
                     j = 0;
+                    rowInt++;
                 } //end inner if
             } //end middle if/else if
         } //en outer if
@@ -257,6 +279,7 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         //New row, start over from first column)
         if (j == dataColumns2.size()-1) {
             j = 0;
+            rowInt++;
         }
     }
 
@@ -270,6 +293,7 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         //New row, start over from first column)
         if (j == dataColumns2.size()-1) {
             j = 0;
+            rowInt++;
         }
     }
 
@@ -280,10 +304,10 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
     }
 
     private void updateCurrentColumnDisplay(int index){     //Inspect whether it is a variable that requires input. If so write it to the current tpe-field.
-        if (!dataColumns2.get(index).getType().equals("COORDINATES") && !dataColumns2.get(index).getType().equals("TIMESTAMP") && !dataColumns2.get(index).getName().equals("Padding end column")) {
+        if (!dataColumns2.get(index).getType().equals(dataTypeEnum.COORDINATES) && !dataColumns2.get(index).getType().equals(dataTypeEnum.TIMESTAMP) && !dataColumns2.get(index).getName().equals("Padding end column")) {
             String updated = dataColumns2.get(index).getType() + " " + dataColumns2.get(index).getName();
             prev.setText(updated);
-            String rowString = ""+(j+1);
+            String rowString = ""+(rowInt);
             rowOrSampleNo.setText(rowString);
         }else{                                      // Otherwise, recursively inspect the next element until the criterion is fulfilled.
             updateCurrentColumnDisplay(index+1);

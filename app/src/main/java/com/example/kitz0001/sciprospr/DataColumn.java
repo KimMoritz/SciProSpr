@@ -15,6 +15,8 @@ public class DataColumn implements Parcelable{
         this.dataType = dataType;
         this.dataIcon = 0;
         this.value= new ArrayList<>();
+        String [] creatorString = {"Tag1", "Tag2"};
+        this.tagSet = new TagSet(creatorString);
         switch(dataType){
             case INTEGER:
                 this.dataIcon=R.drawable.integer;
@@ -85,8 +87,13 @@ public class DataColumn implements Parcelable{
         tagSet = tagSetIn;
     }
 
-    public TagSet getTagSet(){
-        return tagSet;
+    public String[] getTagSet(){
+        String[] tagSetReturnString = new String[tagSet.length()];
+        for(int i =0; i<tagSet.length();i++){
+            tagSetReturnString[i] = tagSet.getTagName(i);
+        }
+
+        return tagSetReturnString;
     }
 
     @Override

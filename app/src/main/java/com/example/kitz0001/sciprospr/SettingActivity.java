@@ -169,14 +169,14 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (digits.length()<1){
-                    digits.setText(R.string.unnamed_tag);
-                }
+                /*if (digits.length()<1){
+                    digits.setText(Integer.toString(1));
+                }*/
                 inputText = digits.getText().toString();
                 int inputInt = Integer.parseInt(inputText);
                 dc.setDigits(inputInt);
                 imm.hideSoftInputFromWindow(digits.getWindowToken(), 0);
-
+                setTags(dc);
             }
         });
         builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -184,50 +184,52 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             public void onClick(DialogInterface dialog, int which) {
                 dc.setDigits(1);
                 imm.hideSoftInputFromWindow(digits.getWindowToken(), 0);
+                setTags(dc);
             }
         });
         builder.show();
-        setTags(dc);
     }
 
-    void setTags(final DataColumn dc){                //TODO: Complete function.
-
-        String[] tags = new String[dc.getDigits()];
-        for(String tag : tags){
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(getString(R.string.how_many_tags));
+    void setTags(final DataColumn dc){
+        final StringBuilder stringBuilder = new StringBuilder();
+        ArrayList <String> tags = new ArrayList<>();
+        for(int i=0; i<dc.getDigits(); i++){
+            AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+            builder2.setTitle(getString(R.string.Set_tag_name) + (i+1));
             final EditText digits = new EditText(this);
             InputFilter[] filter = new InputFilter[1];
-            filter[0] = new InputFilter.LengthFilter(1);
+            filter[0] = new InputFilter.LengthFilter(10);
             digits.setFilters(filter);
             //use screen keyboard
             final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-            digits.setInputType(InputType.TYPE_CLASS_NUMBER);
+            digits.setInputType(InputType.TYPE_CLASS_TEXT);
             digits.requestFocus();
-            builder.setView(digits);
-            builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+            builder2.setView(digits);
+            builder2.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (digits.length()<1){
                         digits.setText(R.string.unnamed_tag);
                     }
-                    inputText = digits.getText().toString();
-                    int inputInt = Integer.parseInt(inputText);
-                    dc.setDigits(inputInt);
+                    stringBuilder.append( digits.getText().toString()); //TODO:Lös tilldelning för att fixa tags-funktion!
                     imm.hideSoftInputFromWindow(digits.getWindowToken(), 0);
                 }
             });
-            builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            builder2.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                 }
             });
-            builder.show();
-            tag = inputText;
+            builder2.show();
+            tags.add(stringBuilder.toString());
         }
-        TagSet tagSet = new TagSet(tags);
+        String[] tagArray = new String[dc.getDigits()];
+        for(int i = 0; i<tagArray.length; i++){
+            tagArray[i] = tags.get(i);
+        }
+
+        TagSet tagSet = new TagSet(tagArray);
         dc.setTagSet(tagSet);
     }
 
