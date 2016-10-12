@@ -173,10 +173,10 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                     digits.setText(Integer.toString(1));
                 }*/
                 inputText = digits.getText().toString();
-                int inputInt = Integer.parseInt(inputText);
-                dc.setDigits(inputInt);
+                int tagNumber = Integer.parseInt(inputText);
+                dc.setDigits(1);
                 imm.hideSoftInputFromWindow(digits.getWindowToken(), 0);
-                setTags(dc);
+                setTags(dc, tagNumber);
             }
         });
         builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -184,16 +184,16 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             public void onClick(DialogInterface dialog, int which) {
                 dc.setDigits(1);
                 imm.hideSoftInputFromWindow(digits.getWindowToken(), 0);
-                setTags(dc);
+                setTags(dc, 2);
             }
         });
         builder.show();
     }
 
-    void setTags(final DataColumn dc){
+    void setTags(final DataColumn dc, int tagNumber){
         final StringBuilder stringBuilder = new StringBuilder();
         ArrayList <String> tags = new ArrayList<>();
-        for(int i=0; i<dc.getDigits(); i++){
+        for(int i=0; i<tagNumber; i++){
             AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
             builder2.setTitle(getString(R.string.Set_tag_name) + (i+1));
             final EditText digits = new EditText(this);
@@ -212,7 +212,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                     if (digits.length()<1){
                         digits.setText(R.string.unnamed_tag);
                     }
-                    stringBuilder.append( digits.getText().toString()); //TODO:Lös tilldelning för att fixa tags-funktion!
+                    stringBuilder.append( digits.getText().toString());
                     imm.hideSoftInputFromWindow(digits.getWindowToken(), 0);
                 }
             });
@@ -229,7 +229,10 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             tagArray[i] = tags.get(i);
         }
 
-        TagSet tagSet = new TagSet(tagArray);
+        ArrayList tagSet = new ArrayList();
+        for(String tag : tagArray){
+            tagSet.add(tag);
+        }
         dc.setTagSet(tagSet);
     }
 

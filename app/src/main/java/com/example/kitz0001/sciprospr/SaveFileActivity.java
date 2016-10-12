@@ -23,7 +23,6 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
     ArrayList<DataColumn> dataColumns;
     String fileNameString;
     String emailString;
-    Uri uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,15 +56,11 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
             saveOnDevice(fileNameString);
         }
         if(emailSwitch.isChecked()){
-            prepareEmail();
+            sendEmail(fileNameString);
         }
     }
 
-    private void prepareEmail(){
-        openFile();
-    }
-
-    private void sendEmail(){
+    private void sendEmail(String fileName){
         try {
             emailString = "kim.moritz@hotmail.com"; //emailAddress.getText().toString(); TODO: Change to accept user input text from text field instead when function is working
             if (emailString.length()==0){
@@ -75,7 +70,10 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
             emailIntent.setType("text/plain");
             String to[]={emailString};
             emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
-            emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
+            File attachmentDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            File attachmentFile = new File(attachmentDirectory, fileName);
+            Uri attachmentUri = Uri.fromFile(attachmentFile);
+            emailIntent.putExtra(Intent.EXTRA_STREAM, attachmentUri);
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
             startActivity(Intent.createChooser(emailIntent, "Send email..."));
         } catch (Exception e) {
@@ -83,10 +81,10 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    public void saveOnDevice(String name){
+    public void saveOnDevice(String fileName){
             try {
-                File fileDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-                File fileForOutPut = new File(fileDirectory, name);
+                File fileDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                File fileForOutPut = new File(fileDirectory, fileName);
                 FileOutputStream fileout = new FileOutputStream(fileForOutPut);
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileout);
                 StringBuilder stringBuilder = new StringBuilder();
@@ -105,18 +103,4 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
                 Toast.makeText(this, "Error while saving the file", Toast.LENGTH_SHORT).show();
             }
         }
-
-    public void openFile() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("*/*");
-        intent.putExtra("return-data", true);
-        startActivityForResult(Intent.createChooser(intent, "Choose file using..."), 101);
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 101 && resultCode == RESULT_OK) {
-            uri = data.getData();
-            sendEmail();
-        }
-    }
 }
