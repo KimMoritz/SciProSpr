@@ -304,13 +304,19 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
     }
 
     private void updateCurrentColumnDisplay(int index){     //Inspect whether it is a variable that requires input. If so write it to the current tpe-field.
+        if(index>dataColumns2.size()){
+            index=0;
+        }
         if (!dataColumns2.get(index).getType().equals(dataTypeEnum.COORDINATES) && !dataColumns2.get(index).getType().equals(dataTypeEnum.TIMESTAMP) && !dataColumns2.get(index).getName().equals("Padding end column")) {
             String updated = dataColumns2.get(index).getType() + " " + dataColumns2.get(index).getName();
             prev.setText(updated);
             String rowString = ""+(rowInt);
             rowOrSampleNo.setText(rowString);
-        }else{                                      // Otherwise, recursively inspect the next element until the criterion is fulfilled.
+        }else if(index<dataColumns2.size()){                                      // Otherwise, recursively inspect the next element until the criterion is fulfilled.
             updateCurrentColumnDisplay(index+1);
+        }else{
+            index=0;
+            updateCurrentColumnDisplay(index);
         }
     }
 

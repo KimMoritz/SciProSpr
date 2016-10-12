@@ -9,14 +9,15 @@ public class DataColumn implements Parcelable{
     private dataTypeEnum dataType;
     private String columnName;
     private ArrayList<String> value =new ArrayList<>();
-    private TagSet tagSet;
+    private ArrayList<String> tagSet;
 
     public DataColumn(dataTypeEnum dataType, String columnName){
         this.dataType = dataType;
         this.dataIcon = 0;
         this.value= new ArrayList<>();
-        String [] creatorString = {"Tag1", "Tag2"};
-        this.tagSet = new TagSet(creatorString);
+        this.tagSet = new ArrayList<>();
+        this.tagSet.add("Tag1");
+        this.tagSet.add("Tag2");
         switch(dataType){
             case INTEGER:
                 this.dataIcon=R.drawable.integer;
@@ -49,6 +50,8 @@ public class DataColumn implements Parcelable{
         columnName = inParcel.readString();
         digits = inParcel.readInt();
         decimals = inParcel.readInt();
+        value = inParcel.readArrayList(Object.class.getClassLoader());
+        tagSet = inParcel.readArrayList(Object.class.getClassLoader());
     }
 
     public static final Creator <DataColumn> CREATOR = new Creator<DataColumn>() {
@@ -83,16 +86,15 @@ public class DataColumn implements Parcelable{
 
     public int getValueSize(){return value.size();}
 
-    public void setTagSet(TagSet tagSetIn){
+    public void setTagSet(ArrayList<String> tagSetIn){
         tagSet = tagSetIn;
     }
 
     public String[] getTagSet(){
-        String[] tagSetReturnString = new String[tagSet.length()];
-        for(int i =0; i<tagSet.length();i++){
-            tagSetReturnString[i] = tagSet.getTagName(i);
+        String[] tagSetReturnString = new String[tagSet.size()];
+        for(int i =0; i<tagSet.size();i++){
+            tagSetReturnString[i] = tagSet.get(i);
         }
-
         return tagSetReturnString;
     }
 
@@ -108,5 +110,7 @@ public class DataColumn implements Parcelable{
         dest.writeString(columnName);
         dest.writeInt(digits);
         dest.writeInt(decimals);
+        dest.writeList(value);
+        dest.writeList(tagSet);
     }
 }
