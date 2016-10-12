@@ -172,7 +172,7 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
 
     private void inputTag() {
             final DataColumn dc = dataColumns2.get(j);
-            final String [] tagArray = dc.getTagSet();//{"Tag1", "tag2"}; //  //TODO: change test strings to import of tags specified in settings
+            final String [] tagArray = dc.getTagSet();
             AlertDialog.Builder builder = new AlertDialog.Builder(Datafeed.this);
             builder.setTitle(R.string.Set_tag_name)
                     .setItems(tagArray, new DialogInterface.OnClickListener() {
@@ -182,8 +182,8 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
                             dataColumns2.set(j, dc);
                         }
                     });
-             builder.show();
-        j++;
+            builder.show();
+            j++;
     }
 
     public void inputText(){
@@ -246,7 +246,6 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         }//end outer if
     }
 
-    //TODO: Remove textLength arraylist and just use dataColumns2.get(j).getDigits() ?
     public void inputLng(){
         if (disp.getText().length() >= textLength.get(j)) {
             DataColumn dc2 = dataColumns2.get(j);
@@ -304,13 +303,19 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
     }
 
     private void updateCurrentColumnDisplay(int index){     //Inspect whether it is a variable that requires input. If so write it to the current tpe-field.
+        if(index >= dataColumns2.size()){
+            index=0;
+        }
         if (!dataColumns2.get(index).getType().equals(dataTypeEnum.COORDINATES) && !dataColumns2.get(index).getType().equals(dataTypeEnum.TIMESTAMP) && !dataColumns2.get(index).getName().equals("Padding end column")) {
             String updated = dataColumns2.get(index).getType() + " " + dataColumns2.get(index).getName();
             prev.setText(updated);
             String rowString = ""+(rowInt);
             rowOrSampleNo.setText(rowString);
-        }else{                                      // Otherwise, recursively inspect the next element until the criterion is fulfilled.
+        }else if(index<dataColumns2.size()){                  // Otherwise, recursively inspect the next element until the criterion is fulfilled.
             updateCurrentColumnDisplay(index+1);
+        }else if (index >=dataColumns2.size()){
+            index=0;
+            updateCurrentColumnDisplay(index);
         }
     }
 
