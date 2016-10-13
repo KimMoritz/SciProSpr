@@ -112,7 +112,13 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
     }
 
     @Override
-    public void onClick(View arg0) { //TODO: Make a separate class for handling datafeed? Would clean up the activity class.
+    public void onClick(View arg0) {
+        respondToButton(arg0);
+        chooseInput();
+        updateCurrentColumnDisplay(j);
+    }
+
+    private void respondToButton(View arg0){
         Editable str = disp.getText();
         switch (arg0.getId()) {
             case R.id.zero: disp.setText(str.append(zero.getText())); break;
@@ -141,7 +147,9 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
                 startActivity(sendIntent);
                 break;
         }
-        // Choose function depending on data type  TODO: break out to separate function
+    }
+
+    private void chooseInput(){
         DataColumn currentDC = dataColumns2.get(j);
         dataTypeEnum dataType = currentDC.getType();
         switch (dataType){
@@ -167,16 +175,15 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
                 inputTag();
                 break;
         }
-        updateCurrentColumnDisplay(j);
     }
 
     private void inputTag() {
-            final DataColumn dc = dataColumns2.get(j);
-            final String [] tagArray = dc.getTagSet();
-            AlertDialog.Builder builder = new AlertDialog.Builder(Datafeed.this);
+            final String [] tagArray = dataColumns2.get(j).getTagSet(); //TODO: Doesn't obtain any strings -> tag set empty here.
+            final AlertDialog.Builder builder = new AlertDialog.Builder(Datafeed.this);
             builder.setTitle(R.string.Set_tag_name)
                     .setItems(tagArray, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            DataColumn dc = dataColumns2.get(j);
                             String inputVar2 = tagArray[which];
                             dc.addValue(inputVar2);
                             dataColumns2.set(j, dc);
@@ -184,6 +191,11 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
                     });
             builder.show();
             j++;
+            disp.setText("");
+            if (j == dataColumns2.size()-1) {
+                j = 0;
+                rowInt++;
+            }
     }
 
     public void inputText(){
@@ -302,7 +314,7 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         return latLng.toString();
     }
 
-    private void updateCurrentColumnDisplay(int index){     //Inspect whether it is a variable that requires input. If so write it to the current tpe-field.
+    private void updateCurrentColumnDisplay(int index){     //Inspect whether it is a variable that requires input. If so write it to the current type-field.
         if(index >= dataColumns2.size()){
             index=0;
         }

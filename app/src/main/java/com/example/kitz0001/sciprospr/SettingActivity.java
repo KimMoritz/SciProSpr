@@ -80,6 +80,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.btnEnum:
                 askForName(dataTypeEnum.TAGS);
+                requiresInput=true;
                 break;
             case R.id.btnPho:
                 //askForName(dataTypeEnum.PHOTO);
@@ -198,7 +199,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             builder2.setTitle(getString(R.string.Set_tag_name) + (i+1));
             final EditText digits = new EditText(this);
             InputFilter[] filter = new InputFilter[1];
-            filter[0] = new InputFilter.LengthFilter(10);
+            filter[0] = new InputFilter.LengthFilter(3);
             digits.setFilters(filter);
             //use screen keyboard
             final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -228,11 +229,8 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         for(int i = 0; i<tagArray.length; i++){
             tagArray[i] = tags.get(i);
         }
-
-        ArrayList tagSet = new ArrayList();
-        for(String tag : tagArray){
-            tagSet.add(tag);
-        }
+        ArrayList <String> tagSet = new ArrayList<>();
+        tagSet.addAll(Arrays.asList(tagArray));
         dc.setTagSet(tagSet);
     }
 

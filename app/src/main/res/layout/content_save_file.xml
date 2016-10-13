@@ -107,30 +107,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="74dp">
 
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="Device storage"
-                        android:id="@+id/textView9" />
-
-                    <Switch
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/devStorageSwitch"
-                        android:checked="false" />
-                </LinearLayout>
             </LinearLayout>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Save and/or send"
+                android:text="Save / send"
                 android:id="@+id/saveButton"
                 android:layout_gravity="center_horizontal"
                 android:background="#0536fa"

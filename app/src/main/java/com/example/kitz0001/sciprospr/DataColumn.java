@@ -1,22 +1,19 @@
 package com.example.kitz0001.sciprospr;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.os.*;
 import java.util.ArrayList;
 
 public class DataColumn implements Parcelable{
     private int digits = 2, decimals = 1, dataIcon;
     private dataTypeEnum dataType;
     private String columnName;
-    private ArrayList<String> value =new ArrayList<>();
-    private TagSet tagSet;
+    private ArrayList<String> value, tagSet;
 
     public DataColumn(dataTypeEnum dataType, String columnName){
         this.dataType = dataType;
         this.dataIcon = 0;
         this.value= new ArrayList<>();
-        String [] creatorString = {"Tag1", "Tag2"};
-        this.tagSet = new TagSet(creatorString);
+        this.tagSet = new ArrayList<>();
         switch(dataType){
             case INTEGER:
                 this.dataIcon=R.drawable.integer;
@@ -49,6 +46,8 @@ public class DataColumn implements Parcelable{
         columnName = inParcel.readString();
         digits = inParcel.readInt();
         decimals = inParcel.readInt();
+        value = inParcel.readArrayList(Object.class.getClassLoader());
+        tagSet = inParcel.readArrayList(Object.class.getClassLoader());
     }
 
     public static final Creator <DataColumn> CREATOR = new Creator<DataColumn>() {
@@ -56,43 +55,29 @@ public class DataColumn implements Parcelable{
         public DataColumn createFromParcel(Parcel in) {
             return new DataColumn(in);
         }
-
         @Override
         public DataColumn[] newArray(int size) {
             return new DataColumn[size];
         }
     };
 
+    //Setters & getters
     public int getIcon(){return dataIcon;}
-
     public dataTypeEnum getType(){ return dataType;}
-
     public String getName(){ return columnName;}
-
     public void setDigits(int diginput){this.digits = diginput;}
-
     public int getDigits(){return  digits;}
-
     public void setDecimals(int dec){this.decimals = dec;}
-
     public int getDecimals(){return decimals;}
-
     public String getValue(int val){return value.get(val);}
-
     public void addValue(String s){value.add(s);}
-
     public int getValueSize(){return value.size();}
-
-    public void setTagSet(TagSet tagSetIn){
+    public void setTagSet(ArrayList<String> tagSetIn){
         tagSet = tagSetIn;
     }
-
     public String[] getTagSet(){
-        String[] tagSetReturnString = new String[tagSet.length()];
-        for(int i =0; i<tagSet.length();i++){
-            tagSetReturnString[i] = tagSet.getTagName(i);
-        }
-
+        String[] tagSetReturnString = new String[tagSet.size()];
+        for(int i =0; i<tagSet.size();i++){tagSetReturnString[i] = tagSet.get(i);}
         return tagSetReturnString;
     }
 
@@ -108,5 +93,7 @@ public class DataColumn implements Parcelable{
         dest.writeString(columnName);
         dest.writeInt(digits);
         dest.writeInt(decimals);
+        dest.writeList(value);
+        dest.writeList(tagSet);
     }
 }

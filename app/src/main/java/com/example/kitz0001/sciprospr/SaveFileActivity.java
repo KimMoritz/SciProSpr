@@ -6,23 +6,16 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Switch;
-import android.widget.Toast;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
+import android.widget.*;
+import java.io.*;
 import java.util.ArrayList;
 
 public class SaveFileActivity extends AppCompatActivity implements View.OnClickListener{
 
-    EditText fileName;
-    EditText emailAddress;
-    Switch emailSwitch, devStorageSwitch;
+    EditText fileName, emailAddress;
+    Switch emailSwitch;
     ArrayList<DataColumn> dataColumns;
-    String fileNameString;
-    String emailString;
+    String fileNameString, emailString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +23,6 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_save_file);
         fileName = (EditText) findViewById(R.id.fileName);
         emailSwitch = (Switch) findViewById(R.id.emailSwitch);
-        devStorageSwitch = (Switch) findViewById(R.id.devStorageSwitch);
         Button saveButton = (Button) findViewById(R.id.saveButton);
         Intent sendIntent = getIntent();
         dataColumns = sendIntent.getParcelableArrayListExtra("DataColumns2");
@@ -43,64 +35,57 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View click) {
-        switch (click.getId()){
-            case R.id.saveButton:
+        if(click.getId()==R.id.saveButton){
                 saveFile();
-                break;
         }
     }
 
     private void saveFile(){
         fileNameString = fileName.getText().toString().concat(".txt");
-        if(devStorageSwitch.isChecked()){
-            saveOnDevice(fileNameString);
-        }
+        File fileDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        saveOnDevice(fileNameString, fileDirectory);
         if(emailSwitch.isChecked()){
-            sendEmail(fileNameString);
-        }
+            emailString = emailAddress.getText().toString();
+            sendEmail(fileNameString, fileDirectory, emailString);}
     }
 
-    private void sendEmail(String fileName){
+    private void sendEmail(String fileName, File directory, String emailStringIn){
         try {
-            emailString = "kim.moritz@hotmail.com"; //emailAddress.getText().toString(); TODO: Change to accept user input text from text field instead when function is working
-            if (emailString.length()==0){
-                throw new Exception();
-            }
+            if (emailStringIn.length()==0){throw new Exception();}
             Intent emailIntent = new Intent(Intent.ACTION_SEND);
             emailIntent.setType("text/plain");
-            String to[]={emailString};
-            emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
-            File attachmentDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-            File attachmentFile = new File(attachmentDirectory, fileName);
-            Uri attachmentUri = Uri.fromFile(attachmentFile);
-            emailIntent.putExtra(Intent.EXTRA_STREAM, attachmentUri);
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String [] {emailStringIn});
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+            emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(directory, fileName)));
             startActivity(Intent.createChooser(emailIntent, "Send email..."));
         } catch (Exception e) {
-            Toast.makeText(this, "Error while creating the email", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error while creating the email. Check filename and email address.", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void saveOnDevice(String fileName){
+    public void saveOnDevice(String fileName, File directory){
             try {
-                File fileDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                File fileForOutPut = new File(fileDirectory, fileName);
-                FileOutputStream fileout = new FileOutputStream(fileForOutPut);
+                FileOutputStream fileout = new FileOutputStream(new File(directory, fileName));
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileout);
                 StringBuilder stringBuilder = new StringBuilder();
-                for (int h = 0; h < dataColumns.size(); h++) {
-                    for (int m = 0; m < dataColumns.get(h).getValueSize(); m++) {
-                        String testText;
-                        testText = dataColumns.get(h).getValue(m);
-                        stringBuilder.append(" C" + Integer.toString(h) + "R"+ Integer.toString(m) + ":" + testText);
-                    }
-                }
+                buildStringFromData(stringBuilder, dataColumns);
                 outputStreamWriter.write(stringBuilder.toString());
                 outputStreamWriter.close();
                 fileout.close();
-                Toast.makeText(this, "File saved as " + fileNameString, Toast.LENGTH_SHORT).show();
-            } catch (Throwable t) {
-                Toast.makeText(this, "Error while saving the file", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "File saved as " + fileNameString, Toast.LENGTH_SHORT).show();}
+            catch (Throwable t) {
+                Toast.makeText(this, "Error while saving the file. Check filename and free space on drive.", Toast.LENGTH_SHORT).show();
             }
         }
-}
+
+    public void buildStringFromData(StringBuilder stringBuilderIn, ArrayList<DataColumn> dataColumnsIn){
+        for (int h = 0; h < dataColumnsIn.size(); h++) {
+            for (int m = 0; m < dataColumnsIn.get(h).getValueSize(); m++) {
+                String testText;
+                testText = dataColumnsIn.get(h).getValue(m);
+                stringBuilderIn.append(" C" + Integer.toString(h) + "R"+ Integer.toString(m) + ":" + testText);
+            } //end inner for
+        }//end outer for
+    }
+
+} //end class
