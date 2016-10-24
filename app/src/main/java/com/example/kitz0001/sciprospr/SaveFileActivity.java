@@ -12,10 +12,9 @@ import java.util.ArrayList;
 
 public class SaveFileActivity extends AppCompatActivity implements View.OnClickListener{
 
-    EditText fileName, emailAddress;
+    EditText fileName, emailAddress, subjectEditText;
     Switch emailSwitch;
     ArrayList<DataColumn> dataColumns;
-    String fileNameString, emailString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +26,7 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
         Intent sendIntent = getIntent();
         dataColumns = sendIntent.getParcelableArrayListExtra("DataColumns2");
         emailAddress = (EditText) findViewById(R.id.emailAddress);
+        subjectEditText = (EditText) findViewById(R.id.subjectEditText);
         try{
             assert saveButton != null;
             saveButton.setOnClickListener(this);}
@@ -41,21 +41,22 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void saveFile(){
-        fileNameString = fileName.getText().toString().concat(".txt");
+        String fileNameString = fileName.getText().toString().concat(".txt");
         File fileDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        saveOnDevice(fileNameString, fileDirectory);
+        saveOnDevice(fileNameString, fileDirectory, fileNameString);
         if(emailSwitch.isChecked()){
-            emailString = emailAddress.getText().toString();
-            sendEmail(fileNameString, fileDirectory, emailString);}
+            String emailString = emailAddress.getText().toString();
+            String subjectString = subjectEditText.getText().toString();
+            sendEmail(fileNameString, fileDirectory, emailString, subjectString);}
     }
 
-    private void sendEmail(String fileName, File directory, String emailStringIn){
+    private void sendEmail(String fileName, File directory, String emailStringIn, String subjectStringIn){
         try {
             if (emailStringIn.length()==0){throw new Exception();}
             Intent emailIntent = new Intent(Intent.ACTION_SEND);
             emailIntent.setType("text/plain");
             emailIntent.putExtra(Intent.EXTRA_EMAIL, new String [] {emailStringIn});
-            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, subjectStringIn);
             emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(directory, fileName)));
             startActivity(Intent.createChooser(emailIntent, "Send email..."));
         } catch (Exception e) {
@@ -63,7 +64,8 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    public void saveOnDevice(String fileName, File directory){
+    // TODO: Change this to a serialized file + a .csv / .txt text delimited file
+    public void saveOnDevice(String fileName, File directory, String fileNameStringIn){
             try {
                 FileOutputStream fileout = new FileOutputStream(new File(directory, fileName));
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileout);
@@ -72,7 +74,7 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
                 outputStreamWriter.write(stringBuilder.toString());
                 outputStreamWriter.close();
                 fileout.close();
-                Toast.makeText(this, "File saved as " + fileNameString, Toast.LENGTH_SHORT).show();}
+                Toast.makeText(this, "File saved as " + fileNameStringIn, Toast.LENGTH_SHORT).show();}
             catch (Throwable t) {
                 Toast.makeText(this, "Error while saving the file. Check filename and free space on drive.", Toast.LENGTH_SHORT).show();
             }

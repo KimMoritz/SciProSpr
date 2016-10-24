@@ -9,12 +9,10 @@ import android.widget.Button;
 
 public class SciProSprMain extends Activity implements View.OnClickListener {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sci_pro_spr_main);
-
         Button newTable = (Button) findViewById(R.id.NewTable);
         Button loadTable = (Button) findViewById(R.id.LoadTable);
         Button visitWebpage = (Button) findViewById(R.id.visitWebPageButton);
@@ -34,7 +32,7 @@ public class SciProSprMain extends Activity implements View.OnClickListener {
                 startActivity(new Intent(SciProSprMain.this, SettingActivity.class));
                 break;
             case R.id.LoadTable:
-                startActivity(new Intent(SciProSprMain.this, SettingActivity.class));
+                // todo: open datafeed with a serialized dataset(use a filepicker first?)
                 break;
             case R.id.visitWebPageButton:
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.moritz.com.se"));

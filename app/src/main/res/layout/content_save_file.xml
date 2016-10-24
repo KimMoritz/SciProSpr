@@ -45,10 +45,9 @@
                     android:layout_weight="0.20" />
 
                 <EditText
-                    android:layout_width="wrap_content"
+                    android:layout_width="217dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/fileName"
-                    android:layout_weight="0.66"
                     android:hint="Filename" />
 
                 <TextView
@@ -107,6 +106,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="74dp">
 
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/subjectEditText"
+                    android:layout_weight="1"
+                    android:hint="Email subject" />
             </LinearLayout>
 
             <Button

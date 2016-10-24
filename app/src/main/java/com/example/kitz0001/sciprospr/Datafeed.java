@@ -75,10 +75,9 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         load = (Button) findViewById(R.id.load);
         send = (Button) findViewById(R.id.sendButton);
         disp = (EditText) findViewById(R.id.display);
-        prev = (EditText) findViewById(R.id.previnp); //TODO:Change name to something informative
+        prev = (EditText) findViewById(R.id.previnp);
         rowOrSampleNo = (EditText) findViewById(R.id.rowOrSampleNumber);
 
-        //TODO: use inner classes instead? Compare Core Java I: chapter about event handling
         try {
             zero.setOnClickListener(this);
             one.setOnClickListener(this);
@@ -177,8 +176,8 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         }
     }
 
-    private void inputTag() {
-            final String [] tagArray = dataColumns2.get(j).getTagSet(); //TODO: Doesn't obtain any strings -> tag set empty here.
+    private void inputTag() { //TODO: Datafeed doesn't work as it should (change of datatype etc).
+            final String [] tagArray = dataColumns2.get(j).getTagSet(); //TODO: Doesn't obtain any strings, leading to tag set being empty here.
             final AlertDialog.Builder builder = new AlertDialog.Builder(Datafeed.this);
             builder.setTitle(R.string.Set_tag_name)
                     .setItems(tagArray, new DialogInterface.OnClickListener() {
@@ -272,7 +271,6 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
                 dataColumns2.set(j, dc);
                 j++;
                 disp.setText("");
-                //New row, start over from first column)
                 if (j == dataColumns2.size()-1) {
                     j = 0;
                     rowInt++;
@@ -287,7 +285,6 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         dc.addValue(coordinates);
         dataColumns2.set(j, dc);
         j++;
-        //New row, start over from first column)
         if (j == dataColumns2.size()-1) {
             j = 0;
             rowInt++;
@@ -301,7 +298,6 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         dc.addValue(time);
         dataColumns2.set(j, dc);
         j++;
-        //New row, start over from first column)
         if (j == dataColumns2.size()-1) {
             j = 0;
             rowInt++;
@@ -386,7 +382,6 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         }
     }
 
-    //Asks for permissions to access location
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
