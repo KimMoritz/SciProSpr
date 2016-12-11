@@ -15,12 +15,11 @@ import java.util.*;
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener  {
     private List<DataColumn> dataCols = new ArrayList<>();
-    private String inputText = "";
-    private String inputText2 = "";
+    private String inputText = "", inputText2 = "";
     public DataColumn col = null;
     private boolean padded = false;
     private boolean requiresInput = false;
-    Button butInt, butLng, butStr, butGPS, butPho, butDat, butDel, butDon, butEnum;
+    Button butInt, butLng, butStr, butGPS, butDat, butDel, butDon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -31,12 +30,10 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         butLng = (Button) findViewById(R.id.btnLon);
         butStr = (Button) findViewById(R.id.btnStr);
         butGPS = (Button) findViewById(R.id.btnGPS);
-        butPho = (Button) findViewById(R.id.btnPho);
         butDat = (Button) findViewById(R.id.btnDat);
         butDel = (Button) findViewById(R.id.delBut);
         butDon = (Button) findViewById(R.id.btnDone);
-        butEnum = (Button) findViewById(R.id.btnEnum);
-        Button[] buttonArray = {butInt, butLng, butStr, butGPS, butPho, butDat, butDel, butDon, butEnum};
+        Button[] buttonArray = {butInt, butLng, butStr, butGPS, butDat, butDel, butDon};
         try{
             for(Button button:buttonArray){
                 button.setOnClickListener(this);
@@ -54,7 +51,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
-    public void onClick(View arg0) {
+    public void onClick(View arg0) {            //TODO: Automatically add index column.
         if(padded&arg0.getId()!=R.id.btnDone){
             dataCols.remove(dataCols.size()-1);
             padded=false;
@@ -78,13 +75,10 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.btnDat:
                 askForName(dataTypeEnum.TIMESTAMP);
                 break;
-            case R.id.btnEnum:
+            /*case R.id.btnEnum:
                 askForName(dataTypeEnum.TAGS);
                 requiresInput=true;
-                break;
-            case R.id.btnPho:
-                //askForName(dataTypeEnum.PHOTO);
-                break;
+                break;*/
             case R.id.delBut:
                 dataCols.clear();
                 padded = false;
@@ -161,7 +155,6 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         InputFilter[] filter = new InputFilter[1];
         filter[0] = new InputFilter.LengthFilter(1);
         digits.setFilters(filter);
-        //use screen keyboard
         final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         digits.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -170,9 +163,6 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                /*if (digits.length()<1){
-                    digits.setText(Integer.toString(1));
-                }*/
                 inputText = digits.getText().toString();
                 int tagNumber = Integer.parseInt(inputText);
                 dc.setDigits(1);
@@ -201,7 +191,6 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             InputFilter[] filter = new InputFilter[1];
             filter[0] = new InputFilter.LengthFilter(3);
             digits.setFilters(filter);
-            //use screen keyboard
             final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
             digits.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -234,7 +223,6 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         dc.setTagSet(tagSet);
     }
 
-    //Dialog for setting number of digits of the columns (as integers in DataColumn objects)
     protected void askNoDigits(final DataColumn dc){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.how_many_digits));
@@ -242,12 +230,41 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         InputFilter[] filter = new InputFilter[1];
         filter[0] = new InputFilter.LengthFilter(1);
         digits.setFilters(filter);
-        //use screen keyboard
         final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         digits.setInputType(InputType.TYPE_CLASS_NUMBER);
         digits.requestFocus();
         builder.setView(digits);
+        setButtons(builder, dc, digits, imm);
+        builder.show();
+    }
+
+    protected void askLongDigits (final DataColumn dc){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LinearLayout lila1= new LinearLayout(this);
+        lila1.setOrientation(LinearLayout.VERTICAL);
+        builder.setTitle(getString(R.string.how_many_decimal_digits));
+        final EditText digits = new EditText(this);
+        digits.setHint(R.string.no_digits);
+        final EditText deci = new EditText(this);
+        deci.setHint(R.string.no_decimals);
+        InputFilter[] filter = new InputFilter[1];
+        filter[0] = new InputFilter.LengthFilter(1);
+        digits.setFilters(filter);
+        deci.setFilters(filter);
+        final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);        //use screen keyboard
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        digits.setInputType(InputType.TYPE_CLASS_NUMBER);
+        deci.setInputType(InputType.TYPE_CLASS_NUMBER);
+        digits.requestFocus();
+        lila1.addView(digits);
+        lila1.addView(deci);
+        builder.setView(lila1);
+        setLongButtons(builder, dc, deci, digits, imm );
+        builder.show();
+    }
+
+    protected void setButtons(AlertDialog.Builder builder, final DataColumn dc, final EditText digits, final InputMethodManager imm){
         builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -267,31 +284,9 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 imm.hideSoftInputFromWindow(digits.getWindowToken(), 0);
             }
         });
-        builder.show();
     }
 
-    protected void askLongDigits (final DataColumn dc){ //TODO: split into several methods ( much too long). Synergy between data type specific digit-askers.
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LinearLayout lila1= new LinearLayout(this);
-        lila1.setOrientation(LinearLayout.VERTICAL);
-        builder.setTitle(getString(R.string.how_many_decimal_digits));
-        final EditText digits = new EditText(this);
-        digits.setHint(R.string.no_digits);
-        final EditText deci = new EditText(this);
-        deci.setHint(R.string.no_decimals);
-        InputFilter[] filter = new InputFilter[1];
-        filter[0] = new InputFilter.LengthFilter(1);
-        digits.setFilters(filter);
-        deci.setFilters(filter);
-        //use screen keyboard
-        final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-        digits.setInputType(InputType.TYPE_CLASS_NUMBER);
-        deci.setInputType(InputType.TYPE_CLASS_NUMBER);
-        digits.requestFocus();
-        lila1.addView(digits);
-        lila1.addView(deci);
-        builder.setView(lila1);
+    protected void setLongButtons(AlertDialog.Builder builder, final DataColumn dc, final EditText deci, final EditText digits, final InputMethodManager imm ){
         builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -318,6 +313,5 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 imm.hideSoftInputFromWindow(digits.getWindowToken(), 0);
             }
         });
-        builder.show();
     }
 }

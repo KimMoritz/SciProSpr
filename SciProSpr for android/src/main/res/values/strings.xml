@@ -24,5 +24,8 @@
     <string name="how_many_tags">How many unique tags ("Enums")?</string>
     <string name="Set_tag_name">Set tag name #</string>
     <string name="unnamed_tag">unnamed_tag</string>
+    <string name="csv">.csv</string>
+    <string name="filename">Filename</string>
+    <string name="filename2">Filename</string>
 
 </resources>

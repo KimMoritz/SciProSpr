@@ -32,19 +32,21 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent"
+            android:layout_width="340dp"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal">
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:weightSum="1">
+                android:weightSum="1"
+                android:layout_marginBottom="8dp">
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="123"
                     android:id="@+id/btnInt"
@@ -53,67 +55,56 @@
                     android:layout_alignParentStart="true"
                     android:layout_weight="1"
                     android:background="#0536fa"
-                    android:textColor="#ffffff" />
+                    android:textColor="#ffffff"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1.23"
                     android:id="@+id/btnLon"
                     android:layout_weight="1"
                     android:background="#0536fa"
-                    android:textColor="#ffffff" />
+                    android:textColor="#ffffff"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Text"
                     android:id="@+id/btnStr"
                     android:layout_weight="1"
                     android:background="#0536fa"
-                    android:textColor="#ffffff" />
+                    android:textColor="#ffffff"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginLeft="8dp" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="TAGS"
-                    android:id="@+id/btnEnum"
-                    android:layout_weight="1"
-                    android:background="#0536fa"
-                    android:textColor="#ffffff" />
-
-                <Button
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="GPS"
                     android:id="@+id/btnGPS"
                     android:layout_weight="1"
                     android:background="#0536fa"
-                    android:textColor="#ffffff" />
+                    android:textColor="#ffffff"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Photo"
-                    android:id="@+id/btnPho"
-                    android:layout_weight="1"
-                    android:background="#0536fa"
-                    android:textColor="#ffffff" />
-
-                <Button
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="DATE"
                     android:id="@+id/btnDat"
-                    android:layout_weight="1"
+                    android:layout_weight="0.43"
                     android:background="#0536fa"
-                    android:textColor="#ffffff" />
+                    android:textColor="#ffffff"
+                    android:layout_marginLeft="8dp" />
 
             </LinearLayout>
 
@@ -121,8 +112,9 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="242dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal">
 
             <Button
                 style="?android:attr/buttonStyleSmall"
@@ -132,7 +124,8 @@
                 android:id="@+id/delBut"
                 android:layout_weight="1"
                 android:background="#b41b1b"
-                android:textColor="#ffffff" />
+                android:textColor="#ffffff"
+                android:layout_marginRight="8dp" />
 
             <Button
                 style="?android:attr/buttonStyleSmall"
@@ -142,7 +135,8 @@
                 android:id="@+id/btnDone"
                 android:layout_weight="1"
                 android:background="#1c6d09"
-                android:textColor="#ffffff" />
+                android:textColor="#ffffff"
+                android:layout_marginLeft="8dp" />
         </LinearLayout>
 
     </LinearLayout>

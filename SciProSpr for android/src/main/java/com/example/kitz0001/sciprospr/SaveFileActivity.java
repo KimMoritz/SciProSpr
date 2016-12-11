@@ -15,6 +15,7 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
     EditText fileName, emailAddress, subjectEditText;
     Switch emailSwitch;
     ArrayList<DataColumn> dataColumns;
+    CsvWriter csvWriter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,7 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
         dataColumns = sendIntent.getParcelableArrayListExtra("DataColumns2");
         emailAddress = (EditText) findViewById(R.id.emailAddress);
         subjectEditText = (EditText) findViewById(R.id.subjectEditText);
+        csvWriter = new CsvWriter();
         try{
             assert saveButton != null;
             saveButton.setOnClickListener(this);}
@@ -41,7 +43,7 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void saveFile(){
-        String fileNameString = fileName.getText().toString().concat(".txt");
+        String fileNameString = fileName.getText().toString().concat(".csv");
         File fileDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         saveOnDevice(fileNameString, fileDirectory, fileNameString);
         if(emailSwitch.isChecked()){
@@ -64,13 +66,12 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    // TODO: Change this to a serialized file + a .csv / .txt text delimited file
     public void saveOnDevice(String fileName, File directory, String fileNameStringIn){
             try {
                 FileOutputStream fileout = new FileOutputStream(new File(directory, fileName));
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileout);
                 StringBuilder stringBuilder = new StringBuilder();
-                buildStringFromData(stringBuilder, dataColumns);
+                stringBuilder = csvWriter.buildStringFromData(stringBuilder, dataColumns);
                 outputStreamWriter.write(stringBuilder.toString());
                 outputStreamWriter.close();
                 fileout.close();
@@ -79,15 +80,4 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
                 Toast.makeText(this, "Error while saving the file. Check filename and free space on drive.", Toast.LENGTH_SHORT).show();
             }
         }
-
-    public void buildStringFromData(StringBuilder stringBuilderIn, ArrayList<DataColumn> dataColumnsIn){
-        for (int h = 0; h < dataColumnsIn.size(); h++) {
-            for (int m = 0; m < dataColumnsIn.get(h).getValueSize(); m++) {
-                String testText;
-                testText = dataColumnsIn.get(h).getValue(m);
-                stringBuilderIn.append(" C" + Integer.toString(h) + "R"+ Integer.toString(m) + ":" + testText);
-            } //end inner for
-        }//end outer for
-    }
-
 } //end class

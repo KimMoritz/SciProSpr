@@ -17,7 +17,8 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:weightSum="1">
 
         <TextView
             android:layout_width="wrap_content"
@@ -38,8 +39,8 @@
 
         <ImageView
             android:id="@+id/bilden"
-            android:layout_width="264dp"
-            android:layout_height="377dp"
+            android:layout_width="241dp"
+            android:layout_height="319dp"
             android:src="@drawable/bild"
             android:padding="5dp"
             android:layout_centerHorizontal="true"
@@ -47,10 +48,12 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="wrap_content"
+            android:layout_width="255dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="5dp"
+            android:layout_weight="0.17"
+            android:weightSum="1">
 
             <Button
                 android:layout_width="104dp"
@@ -63,29 +66,20 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_gravity="left"
-                android:textColor="#ffffff" />
-
-            <Button
-                android:layout_width="99dp"
-                android:layout_height="wrap_content"
-                android:text="Load table"
-                android:id="@+id/LoadTable"
-                android:backgroundTint="#0536fa"
-                android:background="#0536fa"
-                android:layout_alignBottom="@+id/bilden"
-                android:layout_alignRight="@+id/textView"
-                android:layout_alignEnd="@+id/textView"
-                android:textColor="#ffffff" />
+                android:textColor="#ffffff"
+                android:layout_weight="0.34" />
 
             <Button
                 style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
+                android:layout_width="78dp"
                 android:layout_height="wrap_content"
                 android:text="Visit webpage"
                 android:id="@+id/visitWebPageButton"
                 android:layout_gravity="right"
-                android:background="#1c6d09"
-                android:textColor="#ffffff" />
+                android:background="#0536fa"
+                android:textColor="#ffffff"
+                android:backgroundTint="0536fa"
+                android:layout_weight="0.79" />
 
         </LinearLayout>
 

@@ -12,7 +12,7 @@
 
     <EditText
         android:layout_width="fill_parent"
-        android:layout_height="75sp"
+        android:layout_height="62dp"
         android:id = "@+id/display"
         android:hint="Input value"
         android:editable="false"
@@ -21,8 +21,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.09">
+        android:layout_height="wrap_content">
 
         <TextView
             android:layout_width="wrap_content"
@@ -181,7 +180,7 @@
             android:textSize="@dimen/abc_text_size_large_material" />
     </LinearLayout>
     <LinearLayout android:orientation="horizontal"
-        android:layout_width="363dp"
+        android:layout_width="353dp"
         android:layout_height="72dp"
         android:layout_gravity="center"
         android:gravity="center"
@@ -192,41 +191,42 @@
             android:layout_height="121dp"
             android:id = "@+id/cancel"
             android:text="C"
-            android:layout_weight="0.44"
+            android:layout_weight="0.07"
             android:backgroundTint="#1c6d09"
             android:background="#1c6d09"
             android:textColor="#ffffff" />
+
+        <Button
+            android:layout_width="34dp"
+            android:layout_height="114dp"
+            android:id="@+id/save"
+            android:text="S"
+            android:backgroundTint="#1c6d09"
+            android:background="#1c6d09"
+            android:textColor="#ffffff" />
+
         <Button
             android:layout_width="61dp"
             android:layout_height="125dp"
             android:id = "@+id/zero"
             android:text="0"
-            android:layout_weight="0.59"
+            android:layout_weight="0.92"
             android:backgroundTint="#0536fa"
             android:background="#0536fa"
             android:textColor="#ffffff"
             android:textSize="@dimen/abc_text_size_large_material" />
 
         <Button
-            android:layout_width="49dp"
-            android:layout_height="114dp"
-            android:id="@+id/save"
-            android:text="Save"
-            android:backgroundTint="#1c6d09"
-            android:background="#1c6d09"
-            android:textColor="#ffffff" />
-
-        <Button
-            android:layout_width="66dp"
+            android:layout_width="42dp"
             android:layout_height="110dp"
             android:id="@+id/load"
-            android:text="Load"
+            android:text="L"
             android:backgroundTint="#1c6d09"
             android:background="#1c6d09"
             android:textColor="#ffffff" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="64dp"
             android:layout_height="63dp"
             android:text="Send"
             android:id="@+id/sendButton"
