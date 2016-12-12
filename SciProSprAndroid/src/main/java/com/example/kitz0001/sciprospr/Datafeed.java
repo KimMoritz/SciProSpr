@@ -35,7 +35,7 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 0;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private int j = 0, rowInt=1;
-    Button one, two, three, four, five, six, seven, eight, nine, zero, cancel, save, load, send;
+    Button one, two, three, four, five, six, seven, eight, nine, zero, cancel, send ;
     EditText disp, prev, rowOrSampleNo;
     ArrayList<Integer> textLength;
     ArrayList<DataColumn> dataColumns2;
@@ -58,7 +58,6 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
             Integer digs = dc.getDigits();
             textLength.add(digs);
         }
-
         latLng = new LatLng(0.0, 0.0);
         one = (Button) findViewById(R.id.one);
         two = (Button) findViewById(R.id.two);
@@ -71,8 +70,6 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         nine = (Button) findViewById(R.id.nine);
         zero = (Button) findViewById(R.id.zero);
         cancel = (Button) findViewById(R.id.cancel);
-        save = (Button) findViewById(R.id.save);
-        load = (Button) findViewById(R.id.load);
         send = (Button) findViewById(R.id.sendButton);
         disp = (EditText) findViewById(R.id.display);
         prev = (EditText) findViewById(R.id.previnp);
@@ -89,8 +86,6 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
             seven.setOnClickListener(this);
             eight.setOnClickListener(this);
             nine.setOnClickListener(this);
-            save.setOnClickListener(this);
-            load.setOnClickListener(this);
             cancel.setOnClickListener(this);
             send.setOnClickListener(this);
         } catch (Exception e) {
@@ -133,12 +128,6 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
             case R.id.cancel:
                 disp.setText("");
                 disp.setHint("Please input value");
-                break;
-            case R.id.save:
-                this.saveToFile();
-                break;
-            case R.id.load:
-                this.loadFromFile();
                 break;
             case R.id.sendButton:
                 Intent sendIntent = new Intent(Datafeed.this, SaveFileActivity.class);
@@ -253,8 +242,8 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
             if (j == dataColumns2.size()-1) {
                 j = 0;
                 rowInt++;
-            } //end inner if
-        }//end outer if
+            }
+        }
     }
 
     public void inputLng(){
@@ -276,7 +265,7 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
                     rowInt++;
                 } //end inner if
             } //end middle if/else if
-        } //en outer if
+        } //end outer if
     }
 
     public void inputGPS(){
@@ -324,50 +313,6 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         }else if (index >=dataColumns2.size()){
             index=0;
             updateCurrentColumnDisplay(index);
-        }
-    }
-
-    public void saveToFile() {
-        try {
-            FileOutputStream fileout = openFileOutput("SciProSprFile.txt", Context.MODE_PRIVATE);
-            OutputStreamWriter outputWriter = new OutputStreamWriter(fileout);
-            StringBuilder stringBuilder = new StringBuilder();
-            for (int h = 0; h < dataColumns2.size(); h++) {
-                for (int m = 0; m < dataColumns2.get(h).getValueSize(); m++) {
-                    String testText;
-                    testText = dataColumns2.get(h).getValue(m);
-                    stringBuilder.append(" C" + Integer.toString(h) + "R"+ Integer.toString(m) + ":" + testText);
-                }
-            }
-            outputWriter.write(stringBuilder.toString());
-            outputWriter.close();
-            fileout.close();
-            disp.setText("");
-            disp.setHint("Please input data");
-        } catch (Throwable t) {
-            String err = "Error";
-            disp.setText(err);
-        }
-    }
-
-    public void loadFromFile() {
-        try {
-            InputStream instream = openFileInput("SciProSprFile.txt");
-            InputStreamReader inputreader = new InputStreamReader(instream);
-            BufferedReader buffreader = new BufferedReader(inputreader);
-            String line;
-            StringBuilder out = new StringBuilder();
-            while ((line = buffreader.readLine()) != null) {
-                out.append(line);
-            }
-            disp.setText("");
-            disp.setHint(out.toString());
-            buffreader.close();
-            inputreader.close();
-            instream.close();
-        } catch (Throwable t) {
-            String err = "Error";
-            disp.setText(err);
         }
     }
 
