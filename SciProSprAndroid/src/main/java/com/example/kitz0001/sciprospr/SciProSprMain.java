@@ -7,7 +7,12 @@ import android.view.View;
 import android.content.Intent;
 import android.widget.Button;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 public class SciProSprMain extends Activity implements View.OnClickListener {
+
+    private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,7 +20,9 @@ public class SciProSprMain extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_sci_pro_spr_main);
         Button newTable = (Button) findViewById(R.id.NewTable);
         Button visitWebpage = (Button) findViewById(R.id.visitWebPageButton);
-
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
         try{
             newTable.setOnClickListener(this);
             visitWebpage.setOnClickListener(this);

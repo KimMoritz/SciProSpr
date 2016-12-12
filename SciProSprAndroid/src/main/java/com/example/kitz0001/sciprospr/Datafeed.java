@@ -30,6 +30,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.widget.Toast;
 
+import android.os.Vibrator;
+
 public class Datafeed extends Activity implements View.OnClickListener, LocationListener {
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 0;
@@ -43,6 +45,7 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
     String mLatitudeText, mLongiitudeText;
     private LocationManager locationManager;
     private String provider;
+    private Vibrator Vib;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,7 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
             Integer digs = dc.getDigits();
             textLength.add(digs);
         }
+        Vib = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
         latLng = new LatLng(0.0, 0.0);
         one = (Button) findViewById(R.id.one);
         two = (Button) findViewById(R.id.two);
@@ -113,6 +117,7 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
     }
 
     private void respondToButton(View arg0){
+        Vib.vibrate(50);
         Editable str = disp.getText();
         switch (arg0.getId()) {
             case R.id.zero: disp.setText(str.append(zero.getText())); break;
