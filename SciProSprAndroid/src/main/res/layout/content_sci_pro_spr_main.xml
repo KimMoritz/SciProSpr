@@ -25,17 +25,14 @@
             android:layout_height="wrap_content"
             android:text="@string/app_name"
             android:id="@+id/textView2"
-            android:textSize="18dp" />
+            android:textSize="18sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Welcome to SciProSpr! Ready to collect data? Please create a new sheet or choose an existing one!"
-            android:id="@+id/textView"
-            android:layout_below="@+id/textView2"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:text="@string/welcome_to_sciprospr_ready_to_collect_data_please_create_a_new_sheet"
+            android:id="@+id/textView"/>
 
         <ImageView
             android:id="@+id/bilden"
@@ -43,43 +40,37 @@
             android:layout_height="319dp"
             android:src="@drawable/bild"
             android:padding="5dp"
-            android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal" />
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="255dp"
-            android:layout_height="wrap_content"
+            android:layout_width="287dp"
+            android:layout_height="0dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"
-            android:layout_weight="0.17"
+            android:layout_weight="0.50"
             android:weightSum="1">
 
             <Button
-                android:layout_width="104dp"
+                android:layout_width="143dp"
                 android:layout_height="wrap_content"
-                android:text="New table"
+                android:text="@string/new_table"
                 android:id="@+id/NewTable"
                 android:backgroundTint="#1c6d09"
                 android:background="#1c6d09"
-                android:layout_alignBottom="@+id/bilden"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_gravity="left"
-                android:textColor="#ffffff"
-                android:layout_weight="0.34" />
+                android:layout_gravity="start"
+                android:textColor="#ffffff" />
 
             <Button
                 style="?android:attr/buttonStyleSmall"
-                android:layout_width="78dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Visit webpage"
+                android:text="@string/visit_webpage"
                 android:id="@+id/visitWebPageButton"
-                android:layout_gravity="right"
+                android:layout_gravity="end"
                 android:background="#0536fa"
                 android:textColor="#ffffff"
-                android:backgroundTint="0536fa"
-                android:layout_weight="0.79" />
+                android:backgroundTint="#0536fa" />
 
         </LinearLayout>
 

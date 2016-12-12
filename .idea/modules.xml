@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SciProSpr.iml" filepath="$PROJECT_DIR$/SciProSpr.iml" />
-      <module fileurl="file://$PROJECT_DIR$/SciProSpr for android/SciProSpr for android.iml" filepath="$PROJECT_DIR$/SciProSpr for android/SciProSpr for android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SciProSprAndroid/SciProSprAndroid.iml" filepath="$PROJECT_DIR$/SciProSprAndroid/SciProSprAndroid.iml" />
     </modules>
   </component>
 </project>

@@ -41,22 +41,19 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/filename2"
-                    android:id="@+id/textView6"
-                    android:layout_weight="0.20" />
+                    android:id="@+id/textView6" />
 
                 <EditText
-                    android:layout_width="217dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:id="@+id/fileName"
-                    android:hint="@string/filename" />
+                    android:hint="@string/filename"
+                    android:layout_weight="1.08" />
 
-                <TextView
+                <Spinner
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/csv"
-                    android:id="@+id/textView7"
-                    android:layout_weight="0.20" />
+                    android:layout_height="match_parent"
+                    android:id="@+id/spinner" />
 
             </LinearLayout>
 

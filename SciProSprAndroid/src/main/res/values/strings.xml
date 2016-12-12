@@ -27,5 +27,11 @@
     <string name="csv">.csv</string>
     <string name="filename">Filename</string>
     <string name="filename2">Filename</string>
-
+    <string name="new_table">New table</string>
+    <string name="welcome_to_sciprospr_ready_to_collect_data_please_create_a_new_sheet">Welcome to SciProSpr! Ready to collect data? Please create a new sheet!</string>
+    <string name="visit_webpage">Visit webpage</string>
+    <string-array name="file_types">
+        <item>.csv</item>
+        <item>.txt</item>
+    </string-array>
 </resources>

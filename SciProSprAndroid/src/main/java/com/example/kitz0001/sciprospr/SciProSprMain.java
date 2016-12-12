@@ -14,12 +14,10 @@ public class SciProSprMain extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sci_pro_spr_main);
         Button newTable = (Button) findViewById(R.id.NewTable);
-        Button loadTable = (Button) findViewById(R.id.LoadTable);
         Button visitWebpage = (Button) findViewById(R.id.visitWebPageButton);
 
         try{
             newTable.setOnClickListener(this);
-            loadTable.setOnClickListener(this);
             visitWebpage.setOnClickListener(this);
         }
         catch (Exception e){}
@@ -30,9 +28,6 @@ public class SciProSprMain extends Activity implements View.OnClickListener {
         switch(arg0.getId()){
             case R.id.NewTable:
                 startActivity(new Intent(SciProSprMain.this, SettingActivity.class));
-                break;
-            case R.id.LoadTable:
-                // todo: open datafeed with a serialized dataset(use a filepicker first?)
                 break;
             case R.id.visitWebPageButton:
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.moritz.com.se"));
