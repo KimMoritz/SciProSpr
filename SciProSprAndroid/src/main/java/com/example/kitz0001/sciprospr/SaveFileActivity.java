@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import android.Manifest;
 
 public class SaveFileActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener{
-
-    //TextView selectedFileTypeTextView;
     EditText fileName, emailAddress, subjectEditText;
     Switch emailSwitch;
     ArrayList<DataColumn> dataColumns;
@@ -48,11 +46,7 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         fileTypeSpinner.setAdapter(adapter);
         fileTypeSpinner.setOnItemSelectedListener(this);
-
-
-
-        try{
-            assert saveButton != null;
+        try{assert saveButton != null;
             saveButton.setOnClickListener(this);}
         catch (Exception e){}
     }
@@ -65,7 +59,7 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void saveFile(){
-        String fileNameString = fileName.getText().toString().concat(".csv");
+        String fileNameString = fileName.getText().toString().concat(fileTypeSpinner.getSelectedItem().toString());
         File fileDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         saveOnDevice(fileNameString, fileDirectory, fileNameString);
         if(emailSwitch.isChecked()){
@@ -107,7 +101,6 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        //selectedFileTypeTextView.setText(fileTypeSpinner.getSelectedItem().toString());
     }
 
     @Override
