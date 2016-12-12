@@ -13,6 +13,8 @@ import android.widget.*;
 import java.io.*;
 import java.util.ArrayList;
 import android.Manifest;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 public class SaveFileActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener{
     EditText fileName, emailAddress, subjectEditText;
@@ -21,6 +23,7 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
     CsvWriter csvWriter;
     TxtWriter txtWriter;
     Spinner fileTypeSpinner;
+    private AdView mAdView2;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -46,6 +49,9 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         fileTypeSpinner.setAdapter(adapter);
         fileTypeSpinner.setOnItemSelectedListener(this);
+        mAdView2 = (AdView) findViewById(R.id.adView2);
+        AdRequest adRequest2 = new AdRequest.Builder().build();
+        mAdView2.loadAd(adRequest2);
         try{assert saveButton != null;
             saveButton.setOnClickListener(this);}
         catch (Exception e){}

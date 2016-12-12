@@ -164,32 +164,9 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
             case PICTURE:
                 getPhoto();
                 break;
-            case TAGS:
-                inputTag();
-                break;
         }
     }
 
-    private void inputTag() { //TODO: Datafeed doesn't work as it should (change of datatype etc).
-            final String [] tagArray = dataColumns2.get(j).getTagSet(); //TODO: Doesn't obtain any strings, leading to tag set being empty here.
-            final AlertDialog.Builder builder = new AlertDialog.Builder(Datafeed.this);
-            builder.setTitle(R.string.Set_tag_name)
-                    .setItems(tagArray, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            DataColumn dc = dataColumns2.get(j);
-                            String inputVar2 = tagArray[which];
-                            dc.addValue(inputVar2);
-                            dataColumns2.set(j, dc);
-                        }
-                    });
-            builder.show();
-            j++;
-            disp.setText("");
-            if (j == dataColumns2.size()-1) {
-                j = 0;
-                rowInt++;
-            }
-    }
 
     public void inputText(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -235,20 +212,20 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         }
     }
 
-    public void inputInt(){
+    public void inputInt() {
         if (disp.getText().length() >= textLength.get(j)) {
-            String inputvar2 = disp.getText().toString();
-            DataColumn dc = dataColumns2.get(j);
-            dc.addValue(inputvar2);
-            dataColumns2.set(j, dc);
-            j++;
-            disp.setText("");
-            //New row, start over from first column
-            if (j == dataColumns2.size()-1) {
-                j = 0;
-                rowInt++;
+                String inputvar2 = disp.getText().toString();
+                DataColumn dc = dataColumns2.get(j);
+                dc.addValue(inputvar2);
+                dataColumns2.set(j, dc);
+                j++;
+                disp.setText("");
+                //New row, start over from first column
+                if (j == dataColumns2.size() - 1) {
+                    j = 0;
+                    rowInt++;
+                }
             }
-        }
     }
 
     public void inputLng(){
@@ -276,6 +253,7 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
     public void inputGPS(){
         DataColumn dc = dataColumns2.get(j);
         String coordinates = this.getCoordinates();
+        coordinates = coordinates.replace(',', ';');
         dc.addValue(coordinates);
         dataColumns2.set(j, dc);
         j++;

@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import java.util.*;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener  {
     private List<DataColumn> dataCols = new ArrayList<>();
@@ -19,6 +22,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     public DataColumn col = null;
     private boolean padded = false;
     private boolean requiresInput = false;
+    private AdView mAdView3;
     Button butInt, butLng, butStr, butGPS, butDat, butDel, butDon;
 
     @Override
@@ -34,6 +38,9 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         butDel = (Button) findViewById(R.id.delBut);
         butDon = (Button) findViewById(R.id.btnDone);
         Button[] buttonArray = {butInt, butLng, butStr, butGPS, butDat, butDel, butDon};
+        mAdView3 = (AdView) findViewById(R.id.adView3);
+        AdRequest adRequest3 = new AdRequest.Builder().build();
+        mAdView3.loadAd(adRequest3);
         try{
             for(Button button:buttonArray){
                 button.setOnClickListener(this);
@@ -43,7 +50,6 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void populateListView() {
-        //Add objects to the list of data columns
         ArrayAdapter<DataColumn> adapter = new TableListAdapter(SettingActivity.this,R.layout.item_view, (ArrayList) dataCols);
         ListView list = (ListView) findViewById(R.id.listView);
         assert list != null;
@@ -51,7 +57,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
-    public void onClick(View arg0) {            //TODO: Automatically add index column.
+    public void onClick(View arg0) {
         if(padded&arg0.getId()!=R.id.btnDone){
             dataCols.remove(dataCols.size()-1);
             padded=false;
