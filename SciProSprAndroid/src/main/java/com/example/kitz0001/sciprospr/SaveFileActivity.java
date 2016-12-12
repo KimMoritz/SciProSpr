@@ -88,7 +88,7 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
                 FileOutputStream fileout = new FileOutputStream(new File(directory, fileName));
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileout);
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder = csvWriter.buildStringFromData(stringBuilder, dataColumns);
+                stringBuilder = composeString(stringBuilder, dataColumns);
                 outputStreamWriter.write(stringBuilder.toString());
                 outputStreamWriter.close();
                 fileout.close();
@@ -98,6 +98,16 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
                 //Toast.makeText(this, "Error while saving the file. Check filename and free space on drive.", Toast.LENGTH_SHORT).show();
             }
         }
+
+    public StringBuilder composeString(StringBuilder stringBuilder, ArrayList<DataColumn> dataColumns){
+        switch (fileTypeSpinner.getSelectedItemPosition()){
+            case 0: stringBuilder = csvWriter.buildStringFromData(stringBuilder, dataColumns);
+                break;
+            case 1: stringBuilder = txtWriter.buildStringFromData(stringBuilder, dataColumns);
+                break;
+        }
+        return stringBuilder;
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
