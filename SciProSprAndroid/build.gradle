@@ -1,19 +1,28 @@
 apply plugin: 'com.android.application'
 android {
+    signingConfigs {
+    }
     compileSdkVersion 25
     buildToolsVersion "23.0.2"
     defaultConfig {
-        applicationId 'com.example.kitz0001.sciprospr'
+        applicationId 'com.moritz.SciProSpr.sciprospr'
         minSdkVersion 22
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         multiDexEnabled true
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        premiere {
+            debuggable false
+            minifyEnabled false
+        }
+        debug {
+            debuggable false
         }
     }
     dexOptions {
@@ -26,7 +35,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:25.0.1'
     compile 'com.android.support:design:25.0.1'
-    compile "com.google.android.gms:play-services-gcm:10.0.1"
+    compile 'com.google.android.gms:play-services-gcm:10.0.1'
     compile 'com.google.firebase:firebase-appindexing:10.0.1'
     compile 'com.google.android.gms:play-services:10.0.1'
     compile 'com.google.firebase:firebase-ads:10.0.1'

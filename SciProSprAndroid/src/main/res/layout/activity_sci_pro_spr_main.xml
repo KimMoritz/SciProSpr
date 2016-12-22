@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.kitz0001.sciprospr.SciProSprMain"
+    tools:context="com.moritz.SciProSpr.sciprospr.SciProSprMain"
     android:backgroundTint="#e9e9e9"
     android:background="#e9e9e9">
 

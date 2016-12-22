@@ -1,4 +1,4 @@
-package com.example.kitz0001.sciprospr;
+package com.moritz.SciProSpr.sciprospr;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +17,14 @@ class TableListAdapter extends ArrayAdapter<DataColumn> {
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Fill out the view that the visual list representation presents.
+        // TODO: Fill out the view that the visual list representation presents.
         View itemView = convertView;
         if (itemView == null) {
             //Populate using inflater.
             itemView = settingActivity.getLayoutInflater().inflate(R.layout.item_view, parent, false);
         }
         DataColumn chosenColumn = (DataColumn) arrayList.get(position);
-        //Fill out icon, name and data type.
+        //TODO: Fill out icon, name and data type.
         ImageView makeIcon = (ImageView) itemView.findViewById(R.id.imageView);
         makeIcon.setImageResource(chosenColumn.getIcon());
         TextView makeText = (TextView) itemView.findViewById(R.id.colName);

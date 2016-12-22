@@ -1,4 +1,4 @@
-package com.example.kitz0001.sciprospr;
+package com.moritz.SciProSpr.sciprospr;
 
 import org.junit.Test;
 

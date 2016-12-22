@@ -1,6 +1,7 @@
-package com.example.kitz0001.sciprospr;
+package com.moritz.SciProSpr.sciprospr;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -22,7 +23,7 @@ public class SciProSprMain extends Activity implements View.OnClickListener {
         Button visitWebpage = (Button) findViewById(R.id.visitWebPageButton);
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        mAdView.loadAd(adRequest);  //TODO: Se till att rätt kod laddas för banners
         try{
             newTable.setOnClickListener(this);
             visitWebpage.setOnClickListener(this);

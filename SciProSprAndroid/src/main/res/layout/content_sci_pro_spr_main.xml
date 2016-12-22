@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.kitz0001.sciprospr.SciProSprMain"
+    tools:context="com.moritz.SciProSpr.sciprospr.SciProSprMain"
     android:backgroundTint="#ffffff"
     tools:showIn="@layout/activity_sci_pro_spr_main"
     android:transitionGroup="false">

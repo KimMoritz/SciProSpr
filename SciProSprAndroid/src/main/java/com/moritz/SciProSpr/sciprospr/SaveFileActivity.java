@@ -1,4 +1,4 @@
-package com.example.kitz0001.sciprospr;
+package com.moritz.SciProSpr.sciprospr;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -23,7 +23,7 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
     CsvWriter csvWriter;
     TxtWriter txtWriter;
     Spinner fileTypeSpinner;
-    private AdView mAdView2;
+    private AdView mAdView2;//TODO: Se till att rätt kod laddas för banners
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,

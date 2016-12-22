@@ -1,10 +1,11 @@
-package com.example.kitz0001.sciprospr;
+package com.moritz.SciProSpr.sciprospr;
 
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.os.Bundle;
@@ -19,11 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gdata.data.DateTime;
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+
 import java.util.ArrayList;
 import android.location.Location;
 import android.location.LocationListener;
@@ -38,11 +35,12 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private int j = 0, rowInt=1;
     Button one, two, three, four, five, six, seven, eight, nine, zero, cancel, send ;
+    Button[] buttons;
     EditText disp, prev, rowOrSampleNo;
     ArrayList<Integer> textLength;
     ArrayList<DataColumn> dataColumns2;
     private LatLng latLng;
-    String mLatitudeText, mLongiitudeText;
+    String mLatitudeText, mLongitudeText;
     private LocationManager locationManager;
     private String provider;
     private Vibrator Vib;
@@ -53,7 +51,7 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         dataColumns2 = dataIntent.getParcelableArrayListExtra("DataColumns");
         setContentView(R.layout.datafeed_sci_pro_spr);
         mLatitudeText = "startLat";
-        mLongiitudeText = "startLong";
+        mLongitudeText = "startLong";
         super.onCreate(savedInstanceState);
         textLength = new ArrayList<>();
         for (int o = 0; o < dataColumns2.size() - 1; o++) {
@@ -78,8 +76,9 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         disp = (EditText) findViewById(R.id.display);
         prev = (EditText) findViewById(R.id.previnp);
         rowOrSampleNo = (EditText) findViewById(R.id.rowOrSampleNumber);
+        buttons = new Button[]{one, two, three, four, five, six, seven, eight, nine, zero, cancel, send};
 
-        try {
+        try {/*
             zero.setOnClickListener(this);
             one.setOnClickListener(this);
             two.setOnClickListener(this);
@@ -91,9 +90,14 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
             eight.setOnClickListener(this);
             nine.setOnClickListener(this);
             cancel.setOnClickListener(this);
-            send.setOnClickListener(this);
+            send.setOnClickListener(this);*/
+
+            for(Button button:buttons){
+                button.setOnClickListener(this);
+            }
+
         } catch (Exception e) {
-            System.out.print(Thread.currentThread().getStackTrace().toString());
+            System.out.println(e.getStackTrace());
         }
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -131,8 +135,8 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
             case R.id.eight: disp.setText(str.append(eight.getText())); break;
             case R.id.nine: disp.setText(str.append(nine.getText())); break;
             case R.id.cancel:
-                disp.setText("");
-                disp.setHint("Please input value");
+                disp.setText(R.string.empty_string);
+                disp.setHint(R.string.ask_for_input_value);
                 break;
             case R.id.sendButton:
                 Intent sendIntent = new Intent(Datafeed.this, SaveFileActivity.class);
@@ -146,29 +150,16 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         DataColumn currentDC = dataColumns2.get(j);
         dataTypeEnum dataType = currentDC.getType();
         switch (dataType){
-            case COORDINATES:
-                inputGPS();
-                break;
-            case INTEGER:
-                inputInt();
-                break;
-            case LONG:
-                inputLng();
-                break;
-            case TEXT:
-                inputText();
-                break;
-            case TIMESTAMP:
-                inputTime();
-                break;
-            case PICTURE:
-                getPhoto();
-                break;
+            case COORDINATES: inputGPS();break;
+            case INTEGER: inputInt();break;
+            case LONG: inputLng();break;
+            case TEXT: inputText();break;
+            case TIMESTAMP: inputTime();break;
         }
     }
 
-
-    public void inputText(){
+        //TODO: Korta ned metoden. Refaktorisera. Separata klasser för inputmetoder?
+    public void inputText(){ //TODO: Appen kan inte spara om text skrivs in. Varför?
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.add_comment));
         final EditText input = new EditText(this);
@@ -205,7 +196,6 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         builder.show();
         j++;
         disp.setText("");
-        //New row, start over from first column)
         if (j == dataColumns2.size()-1) {
             j = 0;
             rowInt++;
@@ -220,7 +210,6 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
                 dataColumns2.set(j, dc);
                 j++;
                 disp.setText("");
-                //New row, start over from first column
                 if (j == dataColumns2.size() - 1) {
                     j = 0;
                     rowInt++;
@@ -276,13 +265,11 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         }
     }
 
-    public void getPhoto() {}
-
     public String getCoordinates() {
         return latLng.toString();
     }
 
-    private void updateCurrentColumnDisplay(int index){     //Inspect whether it is a variable that requires input. If so write it to the current type-field.
+    private void updateCurrentColumnDisplay(int index){
         if(index >= dataColumns2.size()){
             index=0;
         }
@@ -291,7 +278,7 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
             prev.setText(updated);
             String rowString = ""+(rowInt);
             rowOrSampleNo.setText(rowString);
-        }else if(index<dataColumns2.size()){                  // Otherwise, recursively inspect the next element until the criterion is fulfilled.
+        }else if(index<dataColumns2.size()){
             updateCurrentColumnDisplay(index+1);
         }else if (index >=dataColumns2.size()){
             index=0;
@@ -314,18 +301,14 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION:
-                // Permission Granted
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 } else {
-                    // Permission Denied
                     Toast.makeText(this, "ACCESS_COARSE_LOCATION Denied", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission Granted
                 } else {
-                    // Permission Denied
                     Toast.makeText(this, "ACCESS_FINE_LOCATION Denied", Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -362,4 +345,4 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         }
         locationManager.removeUpdates(this);
     }
-}//end of activity class
+}

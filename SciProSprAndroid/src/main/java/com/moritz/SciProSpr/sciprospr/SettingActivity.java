@@ -1,4 +1,4 @@
-package com.example.kitz0001.sciprospr;
+package com.moritz.SciProSpr.sciprospr;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -16,13 +16,13 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 
-public class SettingActivity extends AppCompatActivity implements View.OnClickListener  {
+public class SettingActivity extends AppCompatActivity implements View.OnClickListener  { //TODO: Byt klassens namn till SetupActivity
     private List<DataColumn> dataCols = new ArrayList<>();
     private String inputText = "", inputText2 = "";
     public DataColumn col = null;
     private boolean padded = false;
     private boolean requiresInput = false;
-    private AdView mAdView3;
+    private AdView mAdView3;//TODO: Se till att rätt kod laddas för banners
     Button butInt, butLng, butStr, butGPS, butDat, butDel, butDon;
 
     @Override

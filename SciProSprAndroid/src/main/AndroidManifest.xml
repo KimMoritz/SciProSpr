@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.kitz0001.sciprospr">
+    package="com.moritz.SciProSpr.sciprospr"
+    android:versionCode="2"
+    android:versionName="1.1" >>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-sdk android:minSdkVersion="22" android:targetSdkVersion="25" />
 
-
-    <uses-feature
-        android:name="android.hardware.camera2"
-        android:required="true" />
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="true" />
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
 
     <application
         android:allowBackup="true"
@@ -24,7 +26,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SciProSprMain"
+            android:name="com.moritz.SciProSpr.sciprospr.SciProSprMain"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
@@ -35,7 +37,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Datafeed" />
+        <activity android:name="com.moritz.SciProSpr.sciprospr.Datafeed" />
         <!--
              ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -45,21 +47,21 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".SettingActivity"
+            android:name="com.moritz.SciProSpr.sciprospr.SettingActivity"
             android:label="@string/title_activity_setting"
-            android:parentActivityName=".SciProSprMain"
+            android:parentActivityName="com.moritz.SciProSpr.sciprospr.SciProSprMain"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.kitz0001.sciprospr.SciProSprMain" />
+                android:value="com.moritz.SciProSpr.sciprospr.SciProSprMain" />
         </activity>
         <activity
-            android:name=".SaveFileActivity"
+            android:name="com.moritz.SciProSpr.sciprospr.SaveFileActivity"
             android:label="@string/title_activity_save_file"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.kitz0001.sciprospr.Datafeed" />
+                android:value="com.moritz.SciProSpr.sciprospr.Datafeed" />
         </activity>
 
     </application>
