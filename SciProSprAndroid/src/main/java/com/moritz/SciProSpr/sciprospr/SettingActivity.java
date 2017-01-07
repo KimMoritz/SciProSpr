@@ -81,10 +81,6 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.btnDat:
                 askForName(dataTypeEnum.TIMESTAMP);
                 break;
-            /*case R.id.btnEnum:
-                askForName(dataTypeEnum.TAGS);
-                requiresInput=true;
-                break;*/
             case R.id.delBut:
                 dataCols.clear();
                 padded = false;
@@ -114,7 +110,6 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         populateListView();
     }
 
-    //Dialog for getting names of the columns (as strings in objects)
     protected void askForName(final dataTypeEnum type){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.name_column));
@@ -131,7 +126,6 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                     input.setText(R.string.unnamed_column);
                 }
                 inputText = input.getText().toString();
-                //Adds the column to the dataCols ArrayList and gives the name from input dialog and type from button clicked.
                 dataCols.add(new DataColumn(type, inputText));
                 imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
                 col = dataCols.get(dataCols.size() - 1);
@@ -139,8 +133,6 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                     askNoDigits(col);
                 } else if (col.getType().equals(dataTypeEnum.LONG)){
                     askLongDigits(col);
-                } else if(col.getType().equals(dataTypeEnum.TAGS)){
-                    askTags(col);
                 }
             }
         });
@@ -152,81 +144,6 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
         builder.show();
-    }
-
-    void askTags(final DataColumn dc){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.how_many_tags));
-        final EditText digits = new EditText(this);
-        InputFilter[] filter = new InputFilter[1];
-        filter[0] = new InputFilter.LengthFilter(1);
-        digits.setFilters(filter);
-        final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-        digits.setInputType(InputType.TYPE_CLASS_NUMBER);
-        digits.requestFocus();
-        builder.setView(digits);
-        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                inputText = digits.getText().toString();
-                int tagNumber = Integer.parseInt(inputText);
-                dc.setDigits(1);
-                imm.hideSoftInputFromWindow(digits.getWindowToken(), 0);
-                setTags(dc, tagNumber);
-            }
-        });
-        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dc.setDigits(1);
-                imm.hideSoftInputFromWindow(digits.getWindowToken(), 0);
-                setTags(dc, 2);
-            }
-        });
-        builder.show();
-    }
-
-    void setTags(final DataColumn dc, int tagNumber){
-        final StringBuilder stringBuilder = new StringBuilder();
-        ArrayList <String> tags = new ArrayList<>();
-        for(int i=0; i<tagNumber; i++){
-            AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
-            builder2.setTitle(getString(R.string.Set_tag_name) + (i+1));
-            final EditText digits = new EditText(this);
-            InputFilter[] filter = new InputFilter[1];
-            filter[0] = new InputFilter.LengthFilter(3);
-            digits.setFilters(filter);
-            final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-            digits.setInputType(InputType.TYPE_CLASS_TEXT);
-            digits.requestFocus();
-            builder2.setView(digits);
-            builder2.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (digits.length()<1){
-                        digits.setText(R.string.unnamed_tag);
-                    }
-                    stringBuilder.append( digits.getText().toString());
-                    imm.hideSoftInputFromWindow(digits.getWindowToken(), 0);
-                }
-            });
-            builder2.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            });
-            builder2.show();
-            tags.add(stringBuilder.toString());
-        }
-        String[] tagArray = new String[dc.getDigits()];
-        for(int i = 0; i<tagArray.length; i++){
-            tagArray[i] = tags.get(i);
-        }
-        ArrayList <String> tagSet = new ArrayList<>();
-        tagSet.addAll(Arrays.asList(tagArray));
-        dc.setTagSet(tagSet);
     }
 
     protected void askNoDigits(final DataColumn dc){

@@ -54,7 +54,7 @@ public class SaveFileActivity extends AppCompatActivity implements View.OnClickL
         mAdView2.loadAd(adRequest2);
         try{assert saveButton != null;
             saveButton.setOnClickListener(this);}
-        catch (Exception e){}
+        catch (Exception e){e.printStackTrace();}
     }
 
     @Override

@@ -78,24 +78,10 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         rowOrSampleNo = (EditText) findViewById(R.id.rowOrSampleNumber);
         buttons = new Button[]{one, two, three, four, five, six, seven, eight, nine, zero, cancel, send};
 
-        try {/*
-            zero.setOnClickListener(this);
-            one.setOnClickListener(this);
-            two.setOnClickListener(this);
-            three.setOnClickListener(this);
-            four.setOnClickListener(this);
-            five.setOnClickListener(this);
-            six.setOnClickListener(this);
-            seven.setOnClickListener(this);
-            eight.setOnClickListener(this);
-            nine.setOnClickListener(this);
-            cancel.setOnClickListener(this);
-            send.setOnClickListener(this);*/
-
+        try {
             for(Button button:buttons){
                 button.setOnClickListener(this);
             }
-
         } catch (Exception e) {
             System.out.println(e.getStackTrace());
         }
@@ -114,16 +100,19 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
     }
 
     @Override
-    public void onClick(View arg0) {
-        respondToButton(arg0);
-        chooseInput();
-        updateCurrentColumnDisplay(j);
+    public void onClick(View view) {
+        //updateCurrentColumnDisplay(j);
+        respondToButton(view);
+        if(view.getId()!=R.id.sendButton){
+            chooseInput();
+            updateCurrentColumnDisplay(j);
+        }
     }
 
-    private void respondToButton(View arg0){
+    private void respondToButton(View view){
         Vib.vibrate(50);
         Editable str = disp.getText();
-        switch (arg0.getId()) {
+        switch (view.getId()) {
             case R.id.zero: disp.setText(str.append(zero.getText())); break;
             case R.id.one: disp.setText(str.append(one.getText())); break;
             case R.id.two: disp.setText(str.append(two.getText())); break;
@@ -153,13 +142,19 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
             case COORDINATES: inputGPS();break;
             case INTEGER: inputInt();break;
             case LONG: inputLng();break;
-            case TEXT: inputText();break;
+            case TEXT: //inputText();
+                /*j++;
+                if (j == dataColumns2.size() - 1) {
+                    j = 0;
+                    rowInt++;
+                }*/
+                break;
             case TIMESTAMP: inputTime();break;
         }
     }
 
-        //TODO: Korta ned metoden. Refaktorisera. Separata klasser för inputmetoder?
-    public void inputText(){ //TODO: Appen kan inte spara om text skrivs in. Varför?
+    //TODO: Appen kan inte spara om text skrivs in. Varför? Ta bort padding?
+    public void inputText(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.add_comment));
         final EditText input = new EditText(this);
@@ -174,32 +169,25 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String inputVar2;
-                inputVar2 = input.getText().toString();
                 DataColumn dc = dataColumns2.get(j);
-                dc.addValue(inputVar2);
+                dc.addValue(input.getText().toString());
                 dataColumns2.set(j, dc);
                 imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
+                j++;
             }
         });
         builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String inputVar2;
-                inputVar2 = "No comment";
                 DataColumn dc = dataColumns2.get(j);
-                dc.addValue(inputVar2);
+                dc.addValue("No comment");
                 dataColumns2.set(j, dc);
                 imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
+                j++;
             }
         });
-        builder.show();
-        j++;
         disp.setText("");
-        if (j == dataColumns2.size()-1) {
-            j = 0;
-            rowInt++;
-        }
+        builder.show();
     }
 
     public void inputInt() {
@@ -273,11 +261,19 @@ public class Datafeed extends Activity implements View.OnClickListener, Location
         if(index >= dataColumns2.size()){
             index=0;
         }
-        if (!dataColumns2.get(index).getType().equals(dataTypeEnum.COORDINATES) && !dataColumns2.get(index).getType().equals(dataTypeEnum.TIMESTAMP) && !dataColumns2.get(index).getName().equals("Padding end column")) {
+        if (!dataColumns2.get(index).getType().equals(dataTypeEnum.COORDINATES) && !dataColumns2.get(index).getType().equals(dataTypeEnum.TIMESTAMP)&& !dataColumns2.get(index).getType().equals(dataTypeEnum.TEXT)) {
             String updated = dataColumns2.get(index).getType() + " " + dataColumns2.get(index).getName();
             prev.setText(updated);
             String rowString = ""+(rowInt);
             rowOrSampleNo.setText(rowString);
+        }else if(dataColumns2.get(index).getType().equals(dataTypeEnum.TEXT)&& !dataColumns2.get(index).getName().equals("Padding end column")){
+            j--;
+            inputText();
+            j++;
+            if (j == dataColumns2.size() - 1) {
+                j = 0;
+                rowInt++;
+            }
         }else if(index<dataColumns2.size()){
             updateCurrentColumnDisplay(index+1);
         }else if (index >=dataColumns2.size()){
